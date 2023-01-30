@@ -1,7 +1,6 @@
 <template>
     <div>
         <TodoForm @add-to-do="addItem"
-            :input-text="inputText"
         />
         <TodoList @remove-item="removeTodo"
             :list-items="listItems"
@@ -15,7 +14,6 @@ import { ref } from 'vue';
 import TodoList from './TodoList.vue';
 
 const listItems = ref<Array<string>>([]);
-const inputText = ref('');
 
 const removeTodo = (ind: number) => {
     listItems.value.splice(ind, 1);
@@ -23,7 +21,6 @@ const removeTodo = (ind: number) => {
 
 const addItem = (text: string) => {
     listItems.value.push(text);
-    inputText.value = '';
 }
 
 </script>
