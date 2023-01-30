@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="grid place-items-center">
         <TodoForm @add-to-do="addItem"
         />
         <TodoList @remove-item="removeTodo"

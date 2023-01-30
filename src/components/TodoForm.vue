@@ -1,12 +1,10 @@
 <template>
     <div>
-        <h1>This is the TodoList</h1>
-            <div>
+        <h1 class="text-center text-2xl py-6">This is the TodoList</h1>
+            <div class="grid grid-rows-3 text-xl place-items-center gap-4">
                 <p>Add To Do item</p>
-                <br />
-                <input v-model="text" @keyup.enter="addTodo">
-                <br/>
-                <button @click="addTodo">Add item</button>
+                <input v-model="text" @keyup.enter="addTodo" class="border-4 border-black rounded-full">
+                <button @click="addTodo" class="border-4 border-black">Add item</button>
             </div>
     </div>
 </template>
