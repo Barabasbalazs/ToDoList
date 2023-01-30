@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import TodoList from './components/TodoList.vue'
+import PageCont from './components/PageCont.vue';
 </script>
 
 <template>
-  <TodoList/>
+  <PageCont/>
 </template>
