@@ -3,20 +3,16 @@
         <TodoForm @add-to-do="addItem"
             :input-text="inputText"
         />
-        <div>
-            <ul v-for="(item, index) in listItems">
-                    <li>
-                        {{ item }}
-                        <button @click="removeTodo(index)"> Remove</button>
-                    </li>    
-            </ul>
-        </div>    
+        <TodoList @remove-item="removeTodo"
+            :list-items="listItems"
+        />   
     </div>
 </template>
 
 <script setup lang="ts">
 import TodoForm from './TodoForm.vue';
 import { ref } from 'vue';
+import TodoList from './TodoList.vue';
 
 const listItems = ref<Array<string>>([]);
 const inputText = ref('');
