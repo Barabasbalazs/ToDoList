@@ -23,8 +23,4 @@ const addTodo = () => {
     text.value = '';
 }    
 
-const fireThis = () => {
-    console.log('Hey im fired');
-}
-
 </script>
