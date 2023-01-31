@@ -1,14 +1,9 @@
 <template>
     <header>
-        <div class="grid grid-rows-2 place-content-evenly">
-            <div class="text-l">
-                <button>Log Out</button>
-            </div>
-            <div class="grid grid-cols-2 text-2xl">    
-                <h1>To do List</h1>
-                <button @click="showForm" class="border-4 border-black">+</button>
-            </div>    
-        </div>
+        <div class="flex flex-cols justify-between px-4 pt-7 items-center">    
+            <h1 class="text-2xl lg:text-7xl font-semibold">To do List</h1>
+            <button @click="showForm" class="lg:w-[59.64px] lg:h-[59.64px] w-8 h-8 bg-green text-xl text-white lg:text-4xl rounded-full col-end-auto">+</button>
+        </div>    
     </header>
 </template>
 
@@ -23,3 +18,11 @@ const showForm = () => {
 }
 
 </script>
+
+<style>
+
+.btn {
+    background-color:  #38CB89;
+}
+
+</style>

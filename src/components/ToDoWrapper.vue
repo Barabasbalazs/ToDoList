@@ -1,14 +1,15 @@
 <template>
-    <PageHeader @show-form="showToDoForm"/>
-    <div class="grid place-items-center">
-        <div v-if="showForm">
-            <TodoForm @add-to-do="addItem"
-                @hide-form="showToDoForm"
+    <div class="max-w-[610px] flex flex-col mx-auto">
+        <PageHeader @show-form="showToDoForm"/>
+            <div v-if="showForm">
+                <TodoForm @add-to-do="addItem"
+                    @hide-form="showToDoForm"/>
+            </div>
+        <div v-if="listItems.length !== 0">
+            <TodoList @remove-item="removeTodo"
+                :list-items="listItems"
             />
-        </div>
-        <TodoList @remove-item="removeTodo"
-            :list-items="listItems"
-        />   
+        </div>       
     </div>
 </template>
 
