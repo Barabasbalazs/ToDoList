@@ -1,18 +1,21 @@
 <template>
     <div class="grid grid-cols text-xl gap-4">
-        <ul v-for="(item, index) in props.listItems">
-            <li class="grid grid-row gap-2 text-center">
-                <p>{{ item }}</p>
-                <button class="border-2" @click="removeTodo(index)"> Remove</button>
-            </li>    
-        </ul>
+        <div v-for="(item, index) in props.listItems">
+            <ToDoItemComp
+                @remove-item="removeTodo"
+                :item="item"
+                :index="index"
+            />   
+        </div>
     </div> 
 </template>
 
 <script setup lang='ts'>
+import { ToDoItem } from '../models/todoitem-model';
+import ToDoItemComp from './ToDoItemComp.vue';
 
 const props = defineProps<{
-    listItems: string []
+    listItems: ToDoItem []
 }>();
 
 const emit = defineEmits<{

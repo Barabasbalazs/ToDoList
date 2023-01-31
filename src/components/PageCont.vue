@@ -1,7 +1,11 @@
 <template>
+    <PageHeader @show-form="showToDoForm"/>
     <div class="grid place-items-center">
-        <TodoForm @add-to-do="addItem"
-        />
+        <div v-if="showForm">
+            <TodoForm @add-to-do="addItem"
+                @hide-form="showToDoForm"
+            />
+        </div>
         <TodoList @remove-item="removeTodo"
             :list-items="listItems"
         />   
@@ -9,18 +13,32 @@
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from 'vue';
+import { ToDoItem } from '../models/todoitem-model';
 import TodoForm from './TodoForm.vue';
-import { ref } from 'vue';
 import TodoList from './TodoList.vue';
+import PageHeader from './PageHeader.vue';
 
-const listItems = ref<Array<string>>([]);
+const storage = localStorage.getItem('listOfItems');
+
+const listItems = ref<Array<ToDoItem>>(storage ? JSON.parse(storage) : []);
+
+const showForm = ref(false);    
 
 const removeTodo = (ind: number) => {
     listItems.value.splice(ind, 1);
 }
 
-const addItem = (text: string) => {
-    listItems.value.push(text);
+const showToDoForm = () => {
+    showForm.value = !showForm.value;
 }
+
+const addItem = (newToDo: ToDoItem) => {
+    listItems.value.push(newToDo); 
+}
+
+watch(listItems.value, (newListItems) => {
+    localStorage.setItem('listOfItems', JSON.stringify(newListItems));
+});
 
 </script>
