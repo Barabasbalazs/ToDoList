@@ -22,7 +22,7 @@ const emit = defineEmits<{
     (e: 'removeItem', ind: number): void
 }>();
 
-const removeTodo = (ind: number) => {
+function removeTodo (ind: number) {
     emit('removeItem', ind);
 }
 

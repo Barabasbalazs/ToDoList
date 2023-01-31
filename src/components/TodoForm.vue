@@ -33,7 +33,7 @@ const emit = defineEmits<{
     (e: 'hideForm'): void
 }>();
 
-const addTodo = () => {
+function addTodo() {
 
     const newToDoItem = {
         title: title.value,
@@ -50,7 +50,7 @@ const addTodo = () => {
     priority.value = Priority.low;
 }    
 
-const hideForm = () => {
+function hideForm () {
     emit('hideForm');
 }
 

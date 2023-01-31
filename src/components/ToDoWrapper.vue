@@ -26,15 +26,15 @@ const listItems = ref<Array<ToDoItem>>(storage ? JSON.parse(storage) : []);
 
 const showForm = ref(false);    
 
-const removeTodo = (ind: number) => {
+function removeTodo (ind: number) {
     listItems.value.splice(ind, 1);
 }
 
-const showToDoForm = () => {
+function showToDoForm () {
     showForm.value = !showForm.value;
 }
 
-const addItem = (newToDo: ToDoItem) => {
+function addItem (newToDo: ToDoItem) {
     listItems.value.push(newToDo); 
 }
 
