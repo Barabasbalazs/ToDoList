@@ -1,9 +1,9 @@
 <template>
   <div
-    class="flex flex-col items-center w-[288.17px] h-[282.5px] justify-center m-auto space-y-3"
+    class="flex flex-col items-center justify-center m-auto space-y-3 mt-14 lg:mt-[72px]"
   >
-    <img src="../assets/placeholder/2_workflow.svg" />
-    <p class="text-xl text-grey lg:text-7xl font-semibold">
+    <img src="../assets/placeholder/2_workflow.svg" class="lg:object-contain"/>
+    <p class="text-xl text-center text-grey lg:text-5xl font-semibold lg:mt-8 mt-6">
       You have no todos yet
     </p>
   </div>
