@@ -1,13 +1,16 @@
 <template>
-  <div class="grid grid-cols text-xl gap-4">
-    <div v-for="(item, index) in props.listItems">
-      <ToDoItemComp @remove-item="removeTodo" :item="item" :index="index" />
+  <div class="flex flex-col space-y-8">
+    <div v-for="(item, index) in props.listItems"
+      class="space-y-8"
+    >
+      <ToDoCard :item="item" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
   import { ToDoItem } from '../models/todoitem-model';
+  import ToDoCard from './ToDoCard.vue';
   import ToDoItemComp from './ToDoItemComp.vue';
 
   const props = defineProps<{
