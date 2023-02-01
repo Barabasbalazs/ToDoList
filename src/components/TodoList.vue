@@ -1,9 +1,8 @@
 <template>
   <div class="flex flex-col space-y-8">
-    <div v-for="(item, index) in props.listItems"
-      class="space-y-8"
-    >
+    <div v-for="(item, index) in props.listItems" class="space-y-8">
       <ToDoCard :item="item" />
+      <ToDoItemComp :item="item" :index="index" />
     </div>
   </div>
 </template>
