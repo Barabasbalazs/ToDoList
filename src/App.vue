@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import PageCont from './components/PageCont.vue';
+  import ToDoWrapper from './components/ToDoWrapper.vue';
 </script>
 
 <template>
-  <PageCont/>
+  <ToDoWrapper />
 </template>

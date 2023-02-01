@@ -1,26 +1,54 @@
 <template>
-    <div>
-        <h1 class="text-center text-2xl py-6">This is the TodoList</h1>
-            <div class="grid grid-rows-3 text-xl place-items-center gap-4">
-                <p>Add To Do item</p>
-                <input v-model="text" @keyup.enter="addTodo" class="border-4 border-black rounded-full">
-                <button @click="addTodo" class="border-4 border-black">Add item</button>
-            </div>
+  <div>
+    <div class="grid grid-rows-2 gap-2 text-center border-2 border-black">
+      <div class="grid grid-cols-2">
+        <input type="text" v-model="title" />
+        <select v-model="priority">
+          <option v-for="value in priorities" :value="value">
+            {{ value }}
+          </option>
+        </select>
+      </div>
+      <input type="text" v-model="text" />
+      <div>
+        <button @click="addTodo">Save</button>
+        <button class="border-2" @click="hideForm">Delete</button>
+      </div>
     </div>
+  </div>
 </template>
 
-<script setup lang = 'ts'>
-import { ref } from 'vue';
+<script setup lang="ts">
+  import { ref } from 'vue';
+  import { Priority, Status, ToDoItem } from '../models/todoitem-model';
 
-const emit = defineEmits<{
-    (e: 'addToDo', text: string): void
-}>();
+  const text = ref('');
+  const title = ref('');
+  const priority = ref(Priority.low);
+  const priorities = [Priority.low, Priority.medium, Priority.high];
 
-const text = ref('');
+  const emit = defineEmits<{
+    (e: 'addToDo', newToDo: ToDoItem): void;
+    (e: 'hideForm'): void;
+  }>();
 
-const addTodo = () => {
-    emit('addToDo', text.value);
+  function addTodo() {
+    const newToDoItem = {
+      title: title.value,
+      text: text.value,
+      priority: priority.value,
+      status: Status.notresolved,
+      createdAt: new Date(),
+    };
+
+    emit('addToDo', newToDoItem);
+
     text.value = '';
-}    
+    title.value = '';
+    priority.value = Priority.low;
+  }
 
+  function hideForm() {
+    emit('hideForm');
+  }
 </script>
