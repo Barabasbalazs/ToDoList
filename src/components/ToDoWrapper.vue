@@ -4,8 +4,9 @@
     <div v-if="showForm">
       <TodoForm @add-to-do="addItem" @hide-form="showToDoForm" />
     </div>
-    <div v-if="listItems.length !== 0">
-      <TodoList @remove-item="removeTodo" :list-items="listItems" />
+    <PlaceHolder v-if="showPlaceHolder" />
+    <div v-else>
+      <TodoList :list-items="listItems" @remove-item="removeTodo" />
     </div>
   </div>
 </template>
@@ -16,12 +17,15 @@
   import TodoForm from './TodoForm.vue';
   import TodoList from './TodoList.vue';
   import PageHeader from './PageHeader.vue';
+  import PlaceHolder from './PlaceHolder.vue';
 
   const storage = localStorage.getItem('listOfItems');
 
   const listItems = ref<Array<ToDoItem>>(storage ? JSON.parse(storage) : []);
 
   const showForm = ref(false);
+
+  const showPlaceHolder = ref(listItems.value.length === 0);
 
   function removeTodo(ind: number) {
     listItems.value.splice(ind, 1);
@@ -37,5 +41,10 @@
 
   watch(listItems.value, (newListItems) => {
     localStorage.setItem('listOfItems', JSON.stringify(newListItems));
+  });
+
+  watch(showForm, (newShowForm) => {
+    showPlaceHolder.value =
+      !newShowForm && listItems.value.length === 0 ? true : false;
   });
 </script>
