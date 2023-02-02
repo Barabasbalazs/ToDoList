@@ -7,9 +7,9 @@
     >
       <div class="flex flex-row items-center space-x-5">
         <div class="p-2 rounded-full h-fit border-2 border-black"></div>
-        <div class="flex flex-col">
-          <p class="self-start text-lg font-medium">{{ props.item.title }}</p>
-          <p class="self-start text-xs text-grey opacity-30">
+        <div class="flex flex-col justify start">
+          <p class="text-lg font-medium">{{ item.title }}</p>
+          <p class="text-xs text-grey opacity-30">
             {{ formatShortDate(date) }}
           </p>
         </div>
@@ -17,28 +17,20 @@
       <div>
         <div
           class="p-1 rounded-full h-fit"
-          :class="[
-            priorityOfThisItem === Priority.low ? 'bg-blue' : '',
-            priorityOfThisItem === Priority.medium ? 'bg-yellow' : '',
-            priorityOfThisItem === Priority.high ? 'bg-red' : '',
-          ]"
+          :class="priorityClass"
         ></div>
       </div>
     </div>
     <div
-      class="flex flex-col m-[18px] font-semibold hidden lg:block justify-between"
+      class="hidden flex flex-col m-[18px] font-semibold lg:block justify-between"
     >
       <div class="flex flex-row justify-between items-center">
-        <p class="text-4xl">{{ props.item.title }}</p>
+        <p class="text-4xl">{{ item.title }}</p>
         <div
           class="text-lg text-white rounded-full"
-          :class="[
-            priorityOfThisItem === Priority.low ? 'bg-blue' : '',
-            priorityOfThisItem === Priority.medium ? 'bg-yellow' : '',
-            priorityOfThisItem === Priority.high ? 'bg-red' : '',
-          ]"
+          :class="priorityClass"
         >
-          <p class="mx-5">{{ props.item.priority }}</p>
+          <p class="mx-5">{{ item.priority }}</p>
         </div>
       </div>
       <div class="flex flex-row justify-between items-center">
@@ -51,9 +43,9 @@
 
 <script setup lang="ts">
   import { ToDoItem } from '../models/todoitem-model';
-  import { formatShortDate } from '../utils/date-formating';
-  import { Priority } from '../models/todoitem-model';
-  import { ref } from 'vue';
+  import { formatShortDate } from '../utils/date-formatting';
+  import { computed } from 'vue';
+  import { getItemPriority } from '../utils/item-priority';
 
   const props = defineProps<{
     item: ToDoItem;
@@ -61,5 +53,5 @@
 
   const date = new Date(props.item.createdAt);
 
-  const priorityOfThisItem = props.item.priority;
+  const priorityClass = computed(() => getItemPriority(props.item.priority));
 </script>

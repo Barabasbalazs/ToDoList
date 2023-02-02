@@ -4,7 +4,7 @@
     <div v-if="showForm">
       <TodoForm @add-to-do="addItem" @hide-form="showToDoForm" />
     </div>
-    <PlaceHolder v-if="showPlaceHolder" />
+    <ToDoPlaceHolder v-if="showPlaceHolder" />
     <div v-else>
       <TodoList :list-items="listItems" @remove-item="removeTodo" />
     </div>
@@ -12,12 +12,12 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, watch } from 'vue';
+  import { computed, ref, watchEffect } from 'vue';
   import { ToDoItem } from '../models/todoitem-model';
   import TodoForm from './TodoForm.vue';
   import TodoList from './TodoList.vue';
   import PageHeader from './PageHeader.vue';
-  import PlaceHolder from './PlaceHolder.vue';
+  import ToDoPlaceHolder from './ToDoListPlaceHolder.vue';
 
   const storage = localStorage.getItem('listOfItems');
 
@@ -25,7 +25,14 @@
 
   const showForm = ref(false);
 
-  const showPlaceHolder = ref(listItems.value.length === 0);
+  const showPlaceHolder = computed(() => {
+    if (showForm.value) {
+      return false;
+    }
+    if (listItems.value.length === 0) {
+      return true;
+    }
+  });
 
   function removeTodo(ind: number) {
     listItems.value.splice(ind, 1);
@@ -39,12 +46,5 @@
     listItems.value.push(newToDo);
   }
 
-  watch(listItems.value, (newListItems) => {
-    localStorage.setItem('listOfItems', JSON.stringify(newListItems));
-  });
-
-  watch(showForm, (newShowForm) => {
-    showPlaceHolder.value =
-      !newShowForm && listItems.value.length === 0 ? true : false;
-  });
+  watchEffect(() => { localStorage.setItem('listOfItems', JSON.stringify(listItems.value)); });
 </script>
