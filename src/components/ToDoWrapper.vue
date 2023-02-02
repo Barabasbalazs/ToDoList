@@ -46,5 +46,7 @@
     listItems.value.push(newToDo);
   }
 
-  watchEffect(() => { localStorage.setItem('listOfItems', JSON.stringify(listItems.value)); });
+  watchEffect(() => {
+    localStorage.setItem('listOfItems', JSON.stringify(listItems.value));
+  });
 </script>
