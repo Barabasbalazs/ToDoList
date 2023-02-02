@@ -60,7 +60,7 @@
         </button>
         <button
           class="rounded-lg h-[27px] w-[70px] bg-buttonGray"
-          @click="removeTodo(index)"
+          @click="removeTodo(indexOfThisItem)"
         >
           Delete
         </button>
@@ -76,19 +76,30 @@
   import { getItemPriority } from '../utils/item-priority';
 
   const props = defineProps<{
-    item: ToDoItem;
-    index: number;
+    item?: ToDoItem,
+    index?: number,
   }>();
 
   const emit = defineEmits<{
-    (e: 'removeItem', ind: number): void;
+    (e: 'removeItem', ind: number): void,
+    (e: 'addToDo', newToDo: ToDoItem): void,
+    (e: 'hideForm'): void,
   }>();
 
-  const priorityClass = computed(() => getItemPriority(props.item.priority));
+  const toDoItem = ref(props.item ? props.item : {
+        text: '',
+        title: '',
+        createdAt: '',
+        priority: Priority.low
+  });
 
-  const currentPriority = ref(props.item.priority);
+  const indexOfThisItem = ref(props.index ? props.index : -1);
 
-  const date = new Date(props.item.createdAt);
+  const priorityClass = computed(() => getItemPriority(toDoItem.value.priority));
+
+  const currentPriority = ref(toDoItem.value.priority);
+
+  const date = new Date(toDoItem.value.createdAt);
 
   const priorityList = [Priority.low, Priority.medium, Priority.high];
 

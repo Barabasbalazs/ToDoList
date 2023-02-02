@@ -2,7 +2,7 @@
   <div class="max-w-[610px] flex flex-col mx-auto">
     <PageHeader @show-form="showToDoForm" />
     <div v-if="showForm">
-      <TodoForm @add-to-do="addItem" @hide-form="showToDoForm" />
+      <ToDoItemComp @add-to-do="addItem" @hide-form="showToDoForm"/>
     </div>
     <ToDoPlaceHolder v-if="showPlaceHolder" />
     <div v-else>
@@ -14,10 +14,10 @@
 <script setup lang="ts">
   import { computed, ref, watchEffect } from 'vue';
   import { ToDoItem } from '../models/todoitem-model';
-  import TodoForm from './TodoForm.vue';
   import TodoList from './TodoList.vue';
   import PageHeader from './PageHeader.vue';
   import ToDoPlaceHolder from './ToDoListPlaceHolder.vue';
+  import ToDoItemComp from './ToDoItemComp.vue';
   const storage = localStorage.getItem('listOfItems');
   const listItems = ref<Array<ToDoItem>>(storage ? JSON.parse(storage) : []);
   const showForm = ref(false);
