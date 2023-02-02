@@ -18,13 +18,9 @@
   import TodoList from './TodoList.vue';
   import PageHeader from './PageHeader.vue';
   import ToDoPlaceHolder from './ToDoListPlaceHolder.vue';
-
   const storage = localStorage.getItem('listOfItems');
-
   const listItems = ref<Array<ToDoItem>>(storage ? JSON.parse(storage) : []);
-
   const showForm = ref(false);
-
   const showPlaceHolder = computed(() => {
     if (showForm.value) {
       return false;
@@ -33,19 +29,15 @@
       return true;
     }
   });
-
   function removeTodo(ind: number) {
     listItems.value.splice(ind, 1);
   }
-
   function showToDoForm() {
     showForm.value = !showForm.value;
   }
-
   function addItem(newToDo: ToDoItem) {
     listItems.value.push(newToDo);
   }
-
   watchEffect(() => {
     localStorage.setItem('listOfItems', JSON.stringify(listItems.value));
   });
