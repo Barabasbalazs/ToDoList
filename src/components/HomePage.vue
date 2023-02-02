@@ -2,7 +2,7 @@
   <div class="max-w-[610px] flex flex-col mx-auto">
     <PageHeader @show-form="showToDoForm" />
     <div v-if="showForm">
-      <ToDoItemComp @add-to-do="addItem" @hide-form="showToDoForm"/>
+      <ToDoItemComp @add-to-do="addItem" @hide-form="showToDoForm" />
     </div>
     <ToDoPlaceHolder v-if="showPlaceHolder" />
     <div v-else>
@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref, watchEffect } from 'vue';
+  import { computed, ref, watchEffect, watch } from 'vue';
   import { ToDoItem } from '../models/todoitem-model';
   import TodoList from './TodoList.vue';
   import PageHeader from './PageHeader.vue';
@@ -37,7 +37,9 @@
   }
   function addItem(newToDo: ToDoItem) {
     listItems.value.push(newToDo);
+    showForm.value = false;
   }
+  watch(showForm, () => {});
   watchEffect(() => {
     localStorage.setItem('listOfItems', JSON.stringify(listItems.value));
   });
