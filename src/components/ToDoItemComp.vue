@@ -1,43 +1,45 @@
 <template>
   <div class="text-center border-2 border-black mx-3.5 rounded-2xl">
+    <div
+      v-if="showPopUp"
+      class="fixed inset-0 items-center justify-center bg-black/75 flex"
+    >
+      <div
+        class="bg-white z-20 border-black border-2 rounded-xl flex flex-col items-center lg:w-2/5 w-4/5"
+      >
+        <div class="text-lg text-white font-semibold rounded-full bg-red mt-2">
+          <p class="mx-5">Warning</p>
+        </div>
+        <p class="m-2">
+          Are you sure you want to delete this item? This operation is permanent
+          and you will not be able to undo this action!
+        </p>
+        <div class="flex flex-row space-x-6 mb-2 font-semibold">
+          <button
+            class="rounded-full bg-green px-2 text-white"
+            @click="removeTodo"
+          >
+            Yes
+          </button>
+          <button
+            class="rounded-full bg-red px-2 text-white"
+            @click="showPopUp = false"
+          >
+            No
+          </button>
+        </div>
+      </div>
+    </div>
     <div class="flex flex-col m-[18px]">
-      <div class="flex flex-row justify-between relative items-center">
+      <div class="flex flex-row justify-between items-center">
         <input
           v-model="currentTitle"
           type="text"
           placeholder="Title"
           class="w-[197px] font-semibold text-lg lg:text-4xl"
-          :class="lowerOpacity ? 'opacity-30' : ''"
-          :disabled="lowerOpacity"
+          :class="showDropDown ? 'opacity-30' : ''"
+          :disabled="showDropDown"
         />
-        <div
-          v-if="showPopUp"
-          class="absolute bg-white z-10 border-black border-2 rounded-xl left-8 lg:left-16 top-2 flex flex-col w-3/4 items-center"
-        >
-          <div
-            class="text-lg text-white font-semibold rounded-full bg-red mt-2"
-          >
-            <p class="mx-5">Warning</p>
-          </div>
-          <p class="m-2">
-            Are you sure you want to delete this item? This operation is
-            permanent and you will not be able to undo this action!
-          </p>
-          <div class="flex flex-row space-x-6 mb-2 font-semibold">
-            <button
-              class="rounded-full bg-green px-2 text-white"
-              @click="removeTodo"
-            >
-              Yes
-            </button>
-            <button
-              class="rounded-full bg-red px-2 text-white"
-              @click="showPopUp = false"
-            >
-              No
-            </button>
-          </div>
-        </div>
         <div class="flex flex-row space-x-[5px] items-center lg:hidden">
           <div
             class="p-1 bg-blue rounded-full h-fit"
@@ -112,7 +114,7 @@
       </div>
       <div
         class="flex flex-row space-x-1"
-        :class="lowerOpacity ? 'opacity-30' : ''"
+        :class="showDropDown ? 'opacity-30' : ''"
       >
         <img src="../assets/icons/Vectorcalendar.svg" />
         <p class="text-xs">{{ formatShortDate(date) }}</p>
@@ -122,23 +124,23 @@
           v-model="currentText"
           placeholder="Lorem ipsum"
           class="border-none h-[70.27px] w-[224.45px] lg:h-[103px] lg:w-[455.1px] text-start text-sm lg:text-lg text-grey"
-          :class="lowerOpacity ? 'opacity-30' : ''"
-          :disabled="lowerOpacity"
+          :class="showDropDown ? 'opacity-30' : ''"
+          :disabled="showDropDown"
         ></textarea>
       </div>
       <div class="text-sm flex flex-row font-semibold space-x-2">
         <button
           class="text-white w-[61px] h-[27px] rounded-lg bg-green"
-          :class="lowerOpacity ? 'opacity-30' : ''"
-          :disabled="lowerOpacity"
+          :class="showDropDown ? 'opacity-30' : ''"
+          :disabled="showDropDown"
           @click="saveToDo"
         >
           Save
         </button>
         <button
           class="rounded-lg h-[27px] w-[70px] bg-buttonGray"
-          :class="lowerOpacity ? 'opacity-30' : ''"
-          :disabled="lowerOpacity"
+          :class="showDropDown ? 'opacity-30' : ''"
+          :disabled="showDropDown"
           @click="deleteToDo"
         >
           Delete
@@ -185,16 +187,6 @@
   const priorityList = [Priority.low, Priority.medium, Priority.high];
 
   const showPopUp = ref(false);
-
-  const lowerOpacity = computed(() => {
-    if (showDropDown.value) {
-      return true;
-    }
-    if (showPopUp.value) {
-      return true;
-    }
-    return false;
-  });
 
   function changePriority(priority: Priority) {
     currentPriority.value = priority;
