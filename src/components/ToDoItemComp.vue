@@ -65,7 +65,7 @@
         </button>
         <button
           class="rounded-lg h-[27px] w-[70px] bg-buttonGray"
-          @click="removeTodo(indexOfThisItem)"
+          @click="removeTodo"
         >
           Delete
         </button>
@@ -89,13 +89,16 @@
     (e: 'removeItem', ind: number): void;
     (e: 'addToDo', newToDo: ToDoItem): void;
     (e: 'hideForm'): void;
+    (e: 'updateToDo', ind: number, newToDo: ToDoItem): void;
   }>();
 
   const currentTitle = ref(props.item ? props.item.title : '');
 
   const currentText = ref(props.item ? props.item.text : '');
 
-  const indexOfThisItem = ref(props.index ? props.index : -1);
+  const indexOfThisItem = ref(
+    props.index || props.index === 0 ? props.index : -1
+  );
 
   const currentPriority = ref(props.item ? props.item.priority : Priority.low);
 
@@ -106,21 +109,25 @@
   const priorityList = [Priority.low, Priority.medium, Priority.high];
 
   function saveToDo() {
-    if (indexOfThisItem.value === -1) {
-      const newToDo = {
+    const newToDo = {
         title: currentTitle.value,
         text: currentText.value,
         createdAt: new Date(),
         priority: currentPriority.value,
         status: Status.notresolved,
       };
+    if (indexOfThisItem.value === -1) {
       emit('addToDo', newToDo);
+    } else {
+      emit('updateToDo', indexOfThisItem.value, newToDo);
     }
   }
 
-  function removeTodo(ind: number) {
-    if (indexOfThisItem.value !== -1) {
-      emit('removeItem', ind);
+  function removeTodo() {
+    if (props.item) {
+      emit('removeItem', indexOfThisItem.value);
+    } else {
+      emit('hideForm');
     }
   }
 </script>
