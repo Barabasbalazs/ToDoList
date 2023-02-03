@@ -16,18 +16,21 @@
             :class="
               currentPriority === Priority.low ? 'border border-black' : ''
             "
+            @click="changePriority(Priority.low)"
           ></div>
           <div
             class="p-1 bg-yellow rounded-full h-fit"
             :class="
               currentPriority === Priority.medium ? 'border border-black' : ''
             "
+            @click="changePriority(Priority.medium)"
           ></div>
           <div
             class="p-1 bg-red rounded-full h-fit"
             :class="
               currentPriority === Priority.high ? 'border border-black' : ''
             "
+            @click="changePriority(Priority.high)"
           ></div>
         </div>
         <div class="hidden lg:flex flex-col">
@@ -79,7 +82,8 @@
           </div>
         </div>
       </div>
-      <div class="flex flex-row space-x-1"
+      <div
+        class="flex flex-row space-x-1"
         :class="showDropDown ? 'opacity-30' : ''"
       >
         <img src="../assets/icons/Vectorcalendar.svg" />
