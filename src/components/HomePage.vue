@@ -1,21 +1,35 @@
 <template>
-  <div class="max-w-[610px] flex flex-col mx-auto">
+  <div class="flex flex-row justify-center">
+    <div class="hidden lg:flex lg:w-1/4" @click="clickAway"></div>
+  <div class="max-w-[610px] flex flex-col lg:w-2/4 w-full">
     <PageHeader @show-form="showToDoForm" />
     <div v-if="showForm">
-      <ToDoItemComp class="mb-8" @add-to-do="addItem" @hide-form="hideToDoForm"/>
+      <ToDoItemComp
+        class="mb-8"
+        @add-to-do="addItem"
+        @hide-form="hideToDoForm"
+      />
     </div>
     <ToDoPlaceHolder v-if="showPlaceHolder" />
     <div v-else class="flex flex-col space-y-8">
       <div v-for="(item, index) in listItems" class="space-y-8">
-        <ToDoItemComp v-if="itemShow === index" :item="item" :index="index" @update-to-do="updateToDo" @remove-item="removeTodo"/>
-        <ToDoCard v-else :item="item" @click="changeStateOfCard(index)"/>
+        <ToDoItemComp
+          v-if="itemShow === index"
+          :item="item"
+          :index="index"
+          @update-to-do="updateToDo"
+          @remove-item="removeTodo"
+        />
+        <ToDoCard v-else :item="item" @click="changeStateOfCard(index)" />
       </div>
     </div>
+  </div>
+  <div class="hidden lg:flex lg:w-1/4" @click="clickAway"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { computed, ref, watchEffect, watch } from 'vue';
+  import { computed, ref, watchEffect } from 'vue';
   import { ToDoItem } from '../models/todoitem-model';
   import ToDoCard from './ToDoCard.vue';
   import PageHeader from './PageHeader.vue';
@@ -33,7 +47,10 @@
       return true;
     }
   });
-  function changeStateOfCard (ind: number) {
+  function clickAway() {
+    itemShow.value = -1;
+  }
+  function changeStateOfCard(ind: number) {
     itemShow.value = ind;
   }
   function removeTodo(ind: number) {
@@ -46,6 +63,7 @@
   }
   function showToDoForm() {
     showForm.value = true;
+    itemShow.value = -1;
   }
   function hideToDoForm() {
     showForm.value = false;

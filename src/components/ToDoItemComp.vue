@@ -110,12 +110,12 @@
 
   function saveToDo() {
     const newToDo = {
-        title: currentTitle.value,
-        text: currentText.value,
-        createdAt: new Date(),
-        priority: currentPriority.value,
-        status: Status.notresolved,
-      };
+      title: currentTitle.value,
+      text: currentText.value,
+      createdAt: new Date(),
+      priority: currentPriority.value,
+      status: Status.notresolved,
+    };
     if (indexOfThisItem.value === -1) {
       emit('addToDo', newToDo);
     } else {
