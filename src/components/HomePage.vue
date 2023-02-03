@@ -1,30 +1,30 @@
 <template>
   <div class="flex flex-row justify-center">
     <div class="hidden lg:flex lg:w-1/4" @click="clickAway"></div>
-  <div class="max-w-[610px] flex flex-col lg:w-2/4 w-full">
-    <PageHeader @show-form="showToDoForm" />
-    <div v-if="showForm">
-      <ToDoItemComp
-        class="mb-8"
-        @add-to-do="addItem"
-        @hide-form="hideToDoForm"
-      />
-    </div>
-    <ToDoPlaceHolder v-if="showPlaceHolder" />
-    <div v-else class="flex flex-col space-y-8">
-      <div v-for="(item, index) in listItems" class="space-y-8">
+    <div class="max-w-[610px] flex flex-col lg:w-2/4 w-full">
+      <PageHeader @show-form="showToDoForm" />
+      <div v-if="showForm">
         <ToDoItemComp
-          v-if="itemShow === index"
-          :item="item"
-          :index="index"
-          @update-to-do="updateToDo"
-          @remove-item="removeTodo"
+          class="mb-8"
+          @add-to-do="addItem"
+          @hide-form="hideToDoForm"
         />
-        <ToDoCard v-else :item="item" @click="changeStateOfCard(index)" />
+      </div>
+      <ToDoPlaceHolder v-if="showPlaceHolder" />
+      <div v-else class="flex flex-col space-y-8">
+        <div v-for="(item, index) in listItems" class="space-y-8">
+          <ToDoItemComp
+            v-if="itemShow === index"
+            :item="item"
+            :index="index"
+            @update-to-do="updateToDo"
+            @remove-item="removeTodo"
+          />
+          <ToDoCard v-else :item="item" @click="changeStateOfCard(index)" />
+        </div>
       </div>
     </div>
-  </div>
-  <div class="hidden lg:flex lg:w-1/4" @click="clickAway"></div>
+    <div class="hidden lg:flex lg:w-1/4" @click="clickAway"></div>
   </div>
 </template>
 
