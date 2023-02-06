@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "eslint": "^8.33.0",
-    "vue": "^3.2.45"
+    "vue": "^3.2.45",
+    "vue3-click-away": "^1.2.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
