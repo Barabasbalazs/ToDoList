@@ -33,7 +33,7 @@
           >
             <PrimaryButton
               class="ml-5 px-0 py-0 mr-3 flex items-center"
-              :additional-classes="textColorOfDropDown"
+              :class="textColorOfDropDown"
               :disabled="isPopUpShown"
               @click="toggleDropDownVisibility"
             >
@@ -72,14 +72,14 @@
       </div>
       <div class="text-sm flex flex-row font-semibold space-x-2">
         <PrimaryButton
-          additional-classes="bg-green"
+          class="bg-green"
           :class="currentOpacity"
           :disabled="isDropDownShown"
           @click="saveToDo"
           >Save</PrimaryButton
         >
         <PrimaryButton
-          additional-classes="bg-buttonGray text-black"
+          class="bg-buttonGray text-black"
           :class="currentOpacity"
           :disabled="isDropDownShown"
           @click="deleteToDo"
@@ -115,12 +115,7 @@
 
   const isDropDownShown = ref(false);
 
-  const currentOpacity = computed(() => {
-    if (isDropDownShown.value) {
-      return 'opacity-30' as const;
-    }
-    return '' as const;
-  });
+  const currentOpacity = computed(() => { return isDropDownShown.value ? 'opacity-30' as const : '' as const;});
 
   const currentTitle = ref(props.item?.title || '');
 
@@ -134,13 +129,7 @@
 
   const isPopUpShown = ref(false);
 
-  const textColorOfDropDown = computed(() => {
-    if (isDropDownShown.value) {
-      return 'text-black' as const;
-    } else {
-      return '' as const;
-    }
-  });
+  const textColorOfDropDown = computed(() => { return isDropDownShown.value ? 'text-black' as const : '' as const;});
 
   const positionOfDropDownButton = computed(() =>
     isPopUpShown.value ? '' : 'relative'
