@@ -40,6 +40,9 @@
   const isFormShown = ref(false);
   const shownItemIndex = ref(-1);
   const isPlaceholderShown = computed(() => {
+    if (isFormShown.value) {
+      return false;
+    }
     return listItems.value.length === 0;
   });
 
