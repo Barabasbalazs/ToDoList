@@ -1,18 +1,18 @@
 <template>
   <div class="max-w-[610px] flex flex-col mx-auto">
     <PageHeader @show-form="showToDoForm" />
-    <div v-if="isFormShown">
-      <EditableToDo
-        class="mb-8"
-        @add-to-do="addToDo"
-        @hide-form="hideToDoForm"
-      />
-    </div>
+    <EditableToDo
+      v-if="isFormShown"
+      class="mb-8"
+      @add-to-do="addToDo"
+      @hide-form="hideToDoForm"
+    />
     <ToDoPlaceHolder v-if="isPlaceholderShown" />
     <div v-else class="flex flex-col space-y-8">
       <div v-for="(item, index) in listItems" class="space-y-8">
         <EditableToDo
           v-if="shownItemIndex === index"
+          v-click-away="toggleToDoEditState"
           :item="item"
           :index="index"
           @update-to-do="updateToDo"
@@ -48,6 +48,10 @@
     }
     return false;
   });
+
+  function toggleToDoEditState() {
+    shownItemIndex.value = -1;
+  }
 
   function changeSelectedCard(ind: number) {
     shownItemIndex.value = ind;

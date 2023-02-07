@@ -1,38 +1,13 @@
 <template>
-  <div
-    v-click-away="clickAway"
-    class="text-center border-2 border-black mx-3.5 rounded-2xl"
-  >
-    <div
+  <div class="text-center border-2 border-black mx-3.5 rounded-2xl">
+    <ConfirmationModal
       v-if="isPopUpShown"
-      class="fixed inset-0 items-center justify-center bg-black/75 flex"
-    >
-      <div
-        class="bg-white z-20 border-black border-2 rounded-xl flex flex-col items-center lg:w-2/5 w-4/5"
-      >
-        <div class="text-lg text-white font-semibold rounded-full bg-red mt-2">
-          <p class="mx-5">Warning</p>
-        </div>
-        <p class="m-2">
-          Are you sure you want to delete this item? This operation is permanent
-          and you will not be able to undo this action!
-        </p>
-        <div class="flex flex-row space-x-6 mb-2 font-semibold">
-          <ModalButton
-            value="Yes"
-            additional-classes="bg-green"
-            :modalButton="true"
-            @click="removeTodo"
-          />
-          <ModalButton
-            value="No"
-            additional-classes="bg-red"
-            :modalButton="true"
-            @click="hidePopUp"
-          />
-        </div>
-      </div>
-    </div>
+      title="Warning"
+      text="Are you sure you want to delete this item? This operation is permanent
+          and you will not be able to undo this action!"
+      @remove-to-do="removeTodo"
+      @hide-pop-up="hidePopUp"
+    />
     <div class="flex flex-col m-[18px]">
       <div class="flex flex-row justify-between items-center">
         <input
@@ -40,14 +15,14 @@
           type="text"
           placeholder="Title"
           class="w-[197px] font-semibold text-lg lg:text-4xl"
-          :class="isDropDownShown ? 'opacity-30' : ''"
+          :class="currentOpacity"
           :disabled="isDropDownShown"
         />
         <div class="flex flex-row space-x-[5px] items- lg:hidden items-center">
           <div
             v-for="(priority, ind) in priorityList"
             class="p-1 rounded-full h-fit"
-            :class="(getColorOfPriority(priority), styleOfPriorityButton(ind))"
+            :class="getColorOfPriority(priority), styleOfPriorityButton(ind)"
             @click="changePriority(priority)"
           ></div>
         </div>
@@ -56,16 +31,15 @@
             class="text-lg text-white font-semibold rounded-full"
             :class="dropDownStyle"
           >
-            <button
-              id="dropdownButton"
-              class="ml-5 mr-3 text-center flex items-center"
-              type="button"
+            <PrimaryButton
+              class="ml-5 px-0 py-0 mr-3 flex items-center"
+              :additional-classes="textColorOfDropDown"
               :disabled="isPopUpShown"
-              @click="changeDropDownShown"
+              @click="toggleDropDownVisibility"
             >
               {{ currentPriority }}
               <img class="pl-2" src="../assets/icons/dropdown-vector.svg" />
-            </button>
+            </PrimaryButton>
           </div>
           <!-- Dropdown menu -->
           <div
@@ -75,7 +49,7 @@
           >
             <ul class="py-2 pl-4 pr-3" aria-labelledby="dropdownButton">
               <li v-for="priority in priorityList">
-                <p class="opacity-100" @click="changePriority(priority)">
+                <p class="opacity-100" @click.stop="changePriority(priority)">
                   {{ priority }}
                 </p>
               </li>
@@ -87,32 +61,30 @@
         <img src="../assets/icons/Vectorcalendar.svg" />
         <p class="text-xs">{{ formatShortDate(date) }}</p>
       </div>
-      <div class="self-start mt-4 mb-4">
+      <div class="flex mt-4 mb-4">
         <textarea
           v-model="currentText"
           placeholder="Lorem ipsum"
-          class="border-none h-[70.27px] w-[224.45px] lg:h-[103px] lg:w-[455.1px] text-start text-sm lg:text-lg text-grey"
+          class="border-none h-18 w-56 lg:h-28 lg:w-96 text-start text-sm lg:text-lg text-grey"
           :class="currentOpacity"
           :disabled="isDropDownShown"
         ></textarea>
       </div>
       <div class="text-sm flex flex-row font-semibold space-x-2">
-        <button
-          class="text-white w-[61px] h-[27px] rounded-lg bg-green"
+        <PrimaryButton
+          additional-classes="bg-green"
           :class="currentOpacity"
           :disabled="isDropDownShown"
           @click="saveToDo"
+          >Save</PrimaryButton
         >
-          Save
-        </button>
-        <button
-          class="rounded-lg h-[27px] w-[70px] bg-buttonGray"
+        <PrimaryButton
+          additional-classes="bg-buttonGray text-black"
           :class="currentOpacity"
           :disabled="isDropDownShown"
           @click="deleteToDo"
+          >Delete</PrimaryButton
         >
-          Delete
-        </button>
       </div>
     </div>
   </div>
@@ -123,7 +95,8 @@
   import { Priority, ToDoItem } from '../models/todoitem-model';
   import { formatShortDate } from '../utils/date-formatting';
   import { getItemPriority } from '../utils/item-priority';
-  import ModalButton from './ModalButton.vue';
+  import ConfirmationModal from './ConfirmationModal.vue';
+  import PrimaryButton from './PrimaryButton.vue';
 
   const props = defineProps({
     item: Object as PropType<ToDoItem>,
@@ -155,26 +128,29 @@
 
   const currentPriority = ref(props.item?.priority || Priority.low);
 
-  const priorityClass = computed(() => getItemPriority(currentPriority.value));
-
   const date = new Date();
 
   const priorityList = [Priority.low, Priority.medium, Priority.high];
 
   const isPopUpShown = ref(false);
 
-  const positionOfDropDownButton = computed(() => {
-    if (isPopUpShown.value) {
+  const textColorOfDropDown = computed(() => {
+    if (isDropDownShown.value) {
+      return 'text-black' as const;
+    } else {
       return '' as const;
     }
-    return 'relative';
   });
+
+  const positionOfDropDownButton = computed(() =>
+    isPopUpShown.value ? '' : 'relative'
+  );
 
   const dropDownStyle = computed(() => {
     if (isDropDownShown.value === true) {
       return 'text-black bg-white border-2 border-black' as const;
     }
-    return priorityClass.value;
+    return getItemPriority(currentPriority.value);
   });
 
   function styleOfPriorityButton(ind: number) {
@@ -188,17 +164,12 @@
     isPopUpShown.value = false;
   }
 
-  function clickAway() {
-    emit('hideForm');
-  }
-
-  function changeDropDownShown() {
+  function toggleDropDownVisibility() {
     isDropDownShown.value = !isDropDownShown.value;
   }
 
   function changePriority(priority: Priority) {
     currentPriority.value = priority;
-    console.log(currentPriority.value);
     isDropDownShown.value = false;
   }
 
