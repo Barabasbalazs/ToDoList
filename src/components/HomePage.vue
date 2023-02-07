@@ -40,13 +40,7 @@
   const isFormShown = ref(false);
   const shownItemIndex = ref(-1);
   const isPlaceholderShown = computed(() => {
-    if (isFormShown.value) {
-      return false;
-    }
-    if (listItems.value.length === 0) {
-      return true;
-    }
-    return false;
+    return listItems.value.length === 0;
   });
 
   function toggleToDoEditState() {
@@ -58,11 +52,11 @@
   }
   function removeTodo(ind: Number) {
     listItems.value.splice(ind.valueOf(), 1);
-    shownItemIndex.value = -1;
+    toggleToDoEditState();
   }
   function showToDoForm() {
     isFormShown.value = true;
-    shownItemIndex.value = -1;
+    toggleToDoEditState();
   }
   function hideToDoForm() {
     isFormShown.value = false;
@@ -73,7 +67,7 @@
   }
   function updateToDo(ind: Number, newToDo: ToDoItem) {
     listItems.value[ind.valueOf()] = newToDo;
-    shownItemIndex.value = -1;
+    toggleToDoEditState();
   }
   watchEffect(() => {
     localStorage.setItem('listOfItems', JSON.stringify(listItems.value));

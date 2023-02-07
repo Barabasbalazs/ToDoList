@@ -136,17 +136,14 @@
   );
 
   const dropDownStyle = computed(() => {
-    if (isDropDownShown.value === true) {
+    if (isDropDownShown.value) {
       return 'text-black bg-white border-2 border-black' as const;
     }
     return getItemPriority(currentPriority.value);
   });
 
   function styleOfPriorityButton(ind: number) {
-    if (currentPriority.value === priorityList[ind]) {
-      return 'border border-black' as const;
-    }
-    return '';
+    return currentPriority.value === priorityList[ind] ? 'border border-black' as const : '' as const;
   }
 
   function hidePopUp() {
