@@ -11,13 +11,13 @@
       </p>
       <div class="flex flex-row space-x-6 mb-2 font-semibold">
         <PrimaryButton
-          additional-classes="bg-green"
+          class="bg-green"
           :modalButton="true"
           @click="removeToDo"
           >Yes
         </PrimaryButton>
         <PrimaryButton
-          additional-classes="bg-red"
+          class="bg-red"
           :modalButton="true"
           @click="hidePopUp"
           >No</PrimaryButton

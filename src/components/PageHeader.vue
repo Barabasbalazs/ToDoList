@@ -3,7 +3,7 @@
     <div class="flex flex-cols justify-between px-4 my-7 items-center w-full">
       <h1 class="text-2xl lg:text-7xl font-semibold">To do List</h1>
       <PrimaryButton
-        additional-classes="lg:w-[59.64px] lg:h-[59.64px] w-8 h-8 bg-green px-0 py-0 text-xl text-white lg:text-4xl rounded-full col-end-auto"
+        class="lg:w-14 lg:h-14 w-8 h-8 bg-green px-0 py-0 text-xl text-white lg:text-4xl rounded-full col-end-auto"
         @click="showForm"
       >
         <p>+</p>
