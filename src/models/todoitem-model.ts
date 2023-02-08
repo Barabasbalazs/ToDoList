@@ -5,6 +5,7 @@ export enum Priority {
 }
 
 export interface ToDoItem {
+  id: number;
   title: string;
   text: string;
   priority: Priority;

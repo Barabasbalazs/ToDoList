@@ -172,6 +172,7 @@
 
   function saveToDo() {
     const newToDo = {
+      id: Math.random() * 1000,
       title: currentTitle.value,
       text: currentText.value,
       createdAt: new Date(),
@@ -205,7 +206,7 @@
 <style>
   .v-enter-active,
   .v-leave-active {
-    transition: opacity 0.5s ease;
+    transition: opacity 0.2s ease;
   }
 
   .v-enter-from,

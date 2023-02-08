@@ -1,12 +1,14 @@
 <template>
   <div class="max-w-[610px] flex flex-col mx-auto">
     <PageHeader @show-form="showToDoForm" />
-    <EditableToDo
-      v-if="isFormShown"
-      class="mb-8"
-      @add-to-do="addToDo"
-      @hide-form="hideToDoForm"
-    />
+    <Transition>
+      <EditableToDo
+        v-if="isFormShown"
+        class="mb-8"
+        @add-to-do="addToDo"
+        @hide-form="hideToDoForm"
+      />
+    </Transition>
     <ToDoPlaceHolder v-if="isPlaceholderShown" />
     <TransitionGroup
       v-else
@@ -16,7 +18,7 @@
     >
       <div
         v-for="(item, index) in listItems"
-        :key="item.title"
+        :key="item.id"
         class="space-y-8"
       >
         <EditableToDo
@@ -66,7 +68,11 @@
 
   function toggleResolvedStatus(ind: number) {
     listItems.value[ind].isResolved = !listItems.value[ind].isResolved;
-    listItems.value.push(listItems.value.splice(ind, 1)[0]);
+    if (listItems.value[ind].isResolved) {
+      listItems.value.push(listItems.value.splice(ind, 1)[0]);
+    } else {
+      listItems.value.unshift(listItems.value.splice(ind, 1)[0]);
+    }
   }
 
   function toggleToDoEditState() {
@@ -107,10 +113,10 @@
 </script>
 
 <style>
-  .list-move, /* apply transition to moving elements */
+  .list-move,
   .list-enter-active,
   .list-leave-active {
-    transition: all 0.3s ease;
+    transition: all 0.5s ease;
   }
 
   .list-enter-from,
@@ -119,9 +125,17 @@
     transform: translateX(-30px);
   }
 
-  /* ensure leaving items are taken out of layout flow so that moving
-   animations can be calculated correctly. */
   .list-leave-active {
     position: absolute;
+  }
+
+  .v-enter-active,
+  .v-leave-active {
+    transition: all 0.5s ease;
+  }
+
+  .v-enter-from,
+  .v-leave-to {
+    opacity: 0;
   }
 </style>
