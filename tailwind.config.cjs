@@ -15,6 +15,7 @@ module.exports = {
       textColor: {
         grey: '#6D6D6D',
         ultragrey: '#333333',
+        midgrey: '#757575',
       },
     },
   },

@@ -1,6 +1,6 @@
 import { Priority } from '../models/todoitem-model';
 
-export function getItemPriority(priorityOfThisItem: Priority) {
+export function getItemPriority<T extends Priority>(priorityOfThisItem: T) {
   const priorityMap = {
     [Priority.low]: 'bg-blue',
     [Priority.medium]: 'bg-yellow',

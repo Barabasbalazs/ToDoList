@@ -1,8 +1,3 @@
-export enum Status {
-  done = 'done',
-  notresolved = 'notresolved',
-}
-
 export enum Priority {
   high = 'High',
   medium = 'Medium',
@@ -14,5 +9,5 @@ export interface ToDoItem {
   text: string;
   priority: Priority;
   createdAt: Date;
-  status: Status;
+  isResolved: boolean;
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import ToDoWrapper from './components/ToDoWrapper.vue';
+  import HomePage from './components/HomePage.vue';
 </script>
 
 <template>
-  <ToDoWrapper />
+  <HomePage />
 </template>
