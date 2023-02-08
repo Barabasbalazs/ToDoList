@@ -72,14 +72,14 @@
       </div>
       <div class="text-sm flex flex-row font-semibold space-x-2">
         <PrimaryButton
-          class="bg-green"
+          class="bg-green px-5 py-2"
           :class="currentOpacity"
           :disabled="isDropDownShown"
           @click="saveToDo"
           >Save</PrimaryButton
         >
         <PrimaryButton
-          class="bg-buttonGray text-black"
+          class="bg-buttonGray text-black px-5 py-2"
           :class="currentOpacity"
           :disabled="isDropDownShown"
           @click="deleteToDo"

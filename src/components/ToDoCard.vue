@@ -15,6 +15,8 @@
         </div>
         <div
           class="p-2 rounded-full h-fit border-2 border-black lg:hidden mr-5"
+          :class="colorOfCheckCircle"
+          @click.stop="toggleResolvedStatus"
         ></div>
         <div class="flex flex-col text-start lg:hidden">
           <p class="text-lg font-medium">{{ item.title }}</p>
@@ -31,10 +33,17 @@
         <p class="text-xs">{{ formatShortDate(date) }}</p>
       </div>
       <div
-        class="hidden lg:flex flex-row justify-between items-center font-semibold mt-5"
+        class="hidden lg:flex flex-row justify-between items-center font-semibold mt-5 relative"
       >
         <p class="text-2xl text-midgrey">{{ item.text }}</p>
-        <div class="p-3 rounded-full h-fit border-4 border-black"></div>
+        <div class="p-3 rounded-full h-fit border-4 flex justify-center items-center"
+          :class="colorOfCheckCircle"
+          @click.stop="toggleResolvedStatus">
+          <img v-if="isResolved"
+          src="../assets/icons/Vectorcheck.svg"
+          class="absolute z-10 bottom-2 w-10 h-8"
+          />  
+        </div>
       </div>
       <div class="lg:hidden">
         <div class="p-1 rounded-full h-fit" :class="priorityClass"></div>
@@ -53,7 +62,21 @@
     item: ToDoItem;
   }>();
 
+  const emit = defineEmits<{
+    (e: 'toggleResolvedStatus'):void
+  }>();
+
+  const isResolved = computed(() => props.item.isResolved);
+
   const date = new Date(props.item.createdAt);
 
   const priorityClass = computed(() => getItemPriority(props.item.priority));
+
+  const colorOfCheckCircle = computed(() => {
+    return isResolved.value ? 'border-green' as const : 'border-black' as const;
+  });
+
+  function toggleResolvedStatus() {
+    emit('toggleResolvedStatus');
+  }
 </script>
