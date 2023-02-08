@@ -1,13 +1,15 @@
 <template>
   <div class="text-center border-2 border-black mx-3.5 rounded-2xl">
-    <ConfirmationModal
-      v-if="isPopUpShown"
-      title="Warning"
-      text="Are you sure you want to delete this item? This operation is permanent
+    <Transition>
+      <ConfirmationModal
+        v-if="isPopUpShown"
+        title="Warning"
+        text="Are you sure you want to delete this item? This operation is permanent
           and you will not be able to undo this action!"
-      @remove-to-do="removeTodo"
-      @hide-pop-up="hidePopUp"
-    />
+        @remove-to-do="removeTodo"
+        @hide-pop-up="hidePopUp"
+      />
+    </Transition>
     <div class="flex flex-col m-[18px]">
       <div class="flex flex-row justify-between items-center">
         <input
@@ -79,7 +81,7 @@
           >Save</PrimaryButton
         >
         <PrimaryButton
-          class="bg-buttonGray text-black px-5 py-2"
+          class="bg-buttonGray text-black px-5 py-2 transition duration-150 ease-in-out"
           :class="currentOpacity"
           :disabled="isDropDownShown"
           @click="deleteToDo"
@@ -104,6 +106,9 @@
       type: Number,
       default: -1,
     },
+    isPopUpShown: {
+      type: Boolean,
+    },
   });
 
   const emit = defineEmits<{
@@ -115,7 +120,9 @@
 
   const isDropDownShown = ref(false);
 
-  const currentOpacity = computed(() => { return isDropDownShown.value ? 'opacity-30' as const : '' as const;});
+  const currentOpacity = computed(() => {
+    return isDropDownShown.value ? ('opacity-30' as const) : ('' as const);
+  });
 
   const currentTitle = ref(props.item?.title || '');
 
@@ -129,11 +136,13 @@
 
   const isPopUpShown = ref(false);
 
-  const textColorOfDropDown = computed(() => { return isDropDownShown.value ? 'text-black' as const : '' as const;});
+  const textColorOfDropDown = computed(() => {
+    return isDropDownShown.value ? ('text-black' as const) : ('' as const);
+  });
 
-  const positionOfDropDownButton = computed(() =>
-    isPopUpShown.value ? '' : 'relative'
-  );
+  const positionOfDropDownButton = computed(() => {
+    return isPopUpShown.value ? ('' as const) : ('relative' as const);
+  });
 
   const dropDownStyle = computed(() => {
     if (isDropDownShown.value) {
@@ -143,7 +152,9 @@
   });
 
   function styleOfPriorityButton(ind: number) {
-    return currentPriority.value === priorityList[ind] ? 'border border-black' as const : '' as const;
+    return currentPriority.value === priorityList[ind]
+      ? ('border border-black' as const)
+      : ('' as const);
   }
 
   function hidePopUp() {
@@ -190,3 +201,15 @@
     emit('removeItem', props.index);
   }
 </script>
+
+<style>
+  .v-enter-active,
+  .v-leave-active {
+    transition: opacity 0.5s ease;
+  }
+
+  .v-enter-from,
+  .v-leave-to {
+    opacity: 0;
+  }
+</style>

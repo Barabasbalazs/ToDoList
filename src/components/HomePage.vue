@@ -8,8 +8,17 @@
       @hide-form="hideToDoForm"
     />
     <ToDoPlaceHolder v-if="isPlaceholderShown" />
-    <div v-else class="flex flex-col space-y-8">
-      <div v-for="(item, index) in listItems" class="space-y-8">
+    <TransitionGroup
+      v-else
+      name="list"
+      tag="div"
+      class="flex flex-col space-y-8"
+    >
+      <div
+        v-for="(item, index) in listItems"
+        :key="item.title"
+        class="space-y-8"
+      >
         <EditableToDo
           v-if="shownItemIndex === index"
           v-click-away="toggleToDoEditState"
@@ -19,12 +28,14 @@
           @remove-item="removeTodo"
           @hide-form="hideToDoForm"
         />
-        <ToDoCard v-else :item="item" 
-        @click="changeSelectedCard(index)" 
-        @toggle-resolved-status="toggleResolvedStatus(index)"
+        <ToDoCard
+          v-else
+          :item="item"
+          @click="changeSelectedCard(index)"
+          @toggle-resolved-status="toggleResolvedStatus(index)"
         />
       </div>
-    </div>
+    </TransitionGroup>
   </div>
 </template>
 
@@ -55,6 +66,7 @@
 
   function toggleResolvedStatus(ind: number) {
     listItems.value[ind].isResolved = !listItems.value[ind].isResolved;
+    listItems.value.push(listItems.value.splice(ind, 1)[0]);
   }
 
   function toggleToDoEditState() {
@@ -93,3 +105,23 @@
     localStorage.setItem('listOfItems', JSON.stringify(listItems.value));
   });
 </script>
+
+<style>
+  .list-move, /* apply transition to moving elements */
+  .list-enter-active,
+  .list-leave-active {
+    transition: all 0.3s ease;
+  }
+
+  .list-enter-from,
+  .list-leave-to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  /* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+  .list-leave-active {
+    position: absolute;
+  }
+</style>

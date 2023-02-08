@@ -1,8 +1,5 @@
 <template>
-  <button
-    class="rounded-xl text-white"
-    :disabled="disabled"
-  >
+  <button class="rounded-xl text-white" :disabled="disabled">
     <slot></slot>
   </button>
 </template>

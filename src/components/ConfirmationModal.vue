@@ -1,7 +1,7 @@
 <template>
-  <div class="fixed inset-0 items-center justify-center bg-black/75 flex">
+  <div class="z-20 fixed inset-0 items-center justify-center bg-black/75 flex">
     <div
-      class="bg-white z-20 border-black border-2 rounded-xl flex flex-col items-center lg:w-2/5 w-4/5"
+      class="bg-white border-black border-2 rounded-xl flex flex-col items-center lg:w-2/5 w-4/5 fade"
     >
       <div class="text-lg text-white font-semibold rounded-full bg-red mt-2">
         <p class="mx-5">{{ title }}</p>
