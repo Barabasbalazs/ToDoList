@@ -39,10 +39,12 @@
         <div class="p-3 rounded-full h-fit border-4 flex justify-center items-center"
           :class="colorOfCheckCircle"
           @click.stop="toggleResolvedStatus">
-          <img v-if="isResolved"
-          src="../assets/icons/Vectorcheck.svg"
-          class="absolute z-10 bottom-2 w-10 h-8"
-          />  
+          <Transition>
+            <img v-if="isResolved"
+            src="../assets/icons/Vectorcheck.svg"
+            class="absolute z-10 bottom-2 w-10 h-8 click:transition"
+            />
+          </Transition>  
         </div>
       </div>
       <div class="lg:hidden">
@@ -80,3 +82,17 @@
     emit('toggleResolvedStatus');
   }
 </script>
+
+<style>
+  .v-enter-active,
+  .v-leave-active {
+    transition: opacity 0.5s ease;
+    transition: width 0.5s ease;
+  }
+
+  .v-enter-from,
+  .v-leave-to {
+    width: 0;
+    opacity: 0;
+  }
+</style>
