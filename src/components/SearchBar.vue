@@ -10,7 +10,7 @@
         </div>
         <div class="flex space-x-2 font-semibold items-center">
             <PrimaryButton
-                v-if="isXButtonShowing"
+                v-if="isClearBtnShown"
                 class="w-4 h-4 bg-red rounded-full py-2 content-center text-xs flex items-center"
                 @click="clearTextField"
             >
@@ -32,7 +32,7 @@ import PrimaryButton from './PrimaryButton.vue';
 
 const searchString = ref('');
 
-const isXButtonShowing = computed(() => searchString.value.length !== 0);
+const isClearBtnShown = computed(() => searchString.value.length !== 0);
 
 const emit = defineEmits<{
     (e: 'searchAccordingTo', searchString: string): void

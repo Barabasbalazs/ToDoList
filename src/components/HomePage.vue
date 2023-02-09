@@ -138,11 +138,10 @@
 
   watchEffect(() => {
     localStorage.setItem('listOfItems', JSON.stringify(listItems.value));
-    if(isContentFiltered) {
+    if (isContentFiltered) {
       return;
-    } else {
-      displayItems.value = listItems.value;
     }
+    displayItems.value = listItems.value;
   });
 </script>
 
