@@ -9,7 +9,8 @@
         @hide-form="hideToDoForm"
       />
     </Transition>
-    <SearchBar v-if="isSearchbarShown"
+    <SearchBar
+      v-if="isSearchbarShown"
       class="mb-8"
       @search-according-to="searchToDo"
     />
@@ -20,27 +21,27 @@
       tag="div"
       class="flex flex-col space-y-8"
     >
-        <div
-          v-for="(item, index) in displayItems"
-          :key="item.id"
-          class="space-y-8"
-        >
-            <EditableToDo
-            v-if="shownItemIndex === index"
-            v-click-away="toggleToDoEditState"
-            :item="item"
-            :index="index"
-            @update-to-do="updateToDo"
-            @remove-item="removeTodo"
-            @hide-form="hideToDoForm"
-          />
-          <ToDoCard
-            v-else
-            :item="item"
-            @click="changeSelectedCard(index)"
-            @toggle-resolved-status="toggleResolvedStatus(index)"
-          />
-        </div>
+      <div
+        v-for="(item, index) in displayItems"
+        :key="item.id"
+        class="space-y-8"
+      >
+        <EditableToDo
+          v-if="shownItemIndex === index"
+          v-click-away="toggleToDoEditState"
+          :item="item"
+          :index="index"
+          @update-to-do="updateToDo"
+          @remove-item="removeTodo"
+          @hide-form="hideToDoForm"
+        />
+        <ToDoCard
+          v-else
+          :item="item"
+          @click="changeSelectedCard(index)"
+          @toggle-resolved-status="toggleResolvedStatus(index)"
+        />
+      </div>
     </TransitionGroup>
   </div>
 </template>
@@ -69,7 +70,7 @@
   const shownItemIndex = ref(-1);
 
   const isSearchbarShown = computed(() => {
-    return (!isPlaceholderShown.value && !isFormShown.value)
+    return !isPlaceholderShown.value && !isFormShown.value;
   });
 
   const isPlaceholderShown = computed(() => {
@@ -86,7 +87,7 @@
       return;
     } else {
       isContentFiltered.value = true;
-      const matchingTitleArray = listItems.value.filter(el => {
+      const matchingTitleArray = listItems.value.filter((el) => {
         if (el.title === searchString || el.text.includes(searchString)) {
           return el;
         }
