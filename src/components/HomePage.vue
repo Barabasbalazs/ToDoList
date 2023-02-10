@@ -9,12 +9,10 @@
         @hide-form="hideToDoForm"
       />
     </Transition>
-    <SearchBar
-      v-if="isSearchbarShown"
-      class="mb-8"
-      @search-according-to="searchToDo"
-    />
-    <FilterBar/>
+    <div v-if="isSearchbarShown">
+      <SearchBar class="mb-8" @search-according-to="searchToDo" />
+      <FilterBar />
+    </div>
     <ToDoPlaceHolder v-if="isPlaceholderShown" />
     <TransitionGroup
       v-else
