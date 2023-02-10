@@ -85,15 +85,14 @@
       displayItems.value = listItems.value;
       isContentFiltered.value = false;
       return;
-    } else {
-      isContentFiltered.value = true;
-      const matchingTitleArray = listItems.value.filter((el) => {
-        if (el.title === searchString || el.text.includes(searchString)) {
-          return el;
-        }
-      });
-      displayItems.value = matchingTitleArray;
     }
+    isContentFiltered.value = true;
+    const matchingTitleArray = listItems.value.filter((el) => {
+      if (el.title === searchString || el.text.includes(searchString)) {
+        return el;
+      }
+    });
+    displayItems.value = matchingTitleArray;
   }
 
   function toggleResolvedStatus(ind: number) {
