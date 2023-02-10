@@ -9,6 +9,6 @@ export interface ToDoItem {
   title: string;
   text: string;
   priority: Priority;
-  createdAt: Date;
+  createdAt: string;
   isResolved: boolean;
 }

@@ -24,7 +24,7 @@
           <div
             v-for="(priority, ind) in priorityList"
             class="p-1 rounded-full h-fit"
-            :class="getColorOfPriority(priority), styleOfPriorityButton(ind)"
+            :class="(getColorOfPriority(priority), styleOfPriorityButton(ind))"
             @click="changePriority(priority)"
           ></div>
         </div>

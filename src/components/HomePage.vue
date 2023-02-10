@@ -55,11 +55,9 @@
   import SearchBar from './SearchBar.vue';
   import FilterBar from './FilterBar.vue';
   import {
-    sortByTitle,
-    sortByText,
-    sortByPriority,
-    sortByDate,
+    sortBySpecificKey
   } from '../utils/sorting-functions';
+  import { FilterType } from '../types/filter-type';
 
   const storageItems = localStorage.getItem('listOfItems');
 
@@ -101,6 +99,7 @@
     displayItems.value = matchingTitleArray;
   }
 
+  // note to myself there is a bug if trying to resolve card while filter is active!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   function toggleResolvedStatus(ind: number) {
     listItems.value[ind].isResolved = !listItems.value[ind].isResolved;
     if (listItems.value[ind].isResolved) {
@@ -142,20 +141,9 @@
     toggleToDoEditState();
   }
 
-  function filterToDos(filterCategory: string, order: number) {
-    if (filterCategory === '') {
-      return;
-    }
+  function filterToDos(filter: FilterType, order: number) {
     const currentToDosOnDisplay = displayItems.value.slice();
-    if (filterCategory === 'Title') {
-      displayItems.value = sortByTitle(currentToDosOnDisplay, order);
-    } else if (filterCategory === 'Text') {
-      displayItems.value = sortByText(currentToDosOnDisplay, order);
-    } else if (filterCategory === 'Date') {
-      displayItems.value = sortByDate(currentToDosOnDisplay, order);
-    } else if (filterCategory === 'Priority') {
-      displayItems.value = sortByPriority(currentToDosOnDisplay, order);
-    }
+    displayItems.value = currentToDosOnDisplay.sort(sortBySpecificKey(filter, order));
   }
 
   watchEffect(() => {
