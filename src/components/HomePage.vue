@@ -9,6 +9,11 @@
         @hide-form="hideToDoForm"
       />
     </Transition>
+    <SearchBar
+      v-if="isSearchbarShown"
+      class="mb-8"
+      @search-according-to="searchToDo"
+    />
     <ToDoPlaceHolder v-if="isPlaceholderShown" />
     <TransitionGroup
       v-else
@@ -17,7 +22,7 @@
       class="flex flex-col space-y-8"
     >
       <div
-        v-for="(item, index) in listItems"
+        v-for="(item, index) in displayItems"
         :key="item.id"
         class="space-y-8"
       >
@@ -42,12 +47,13 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref, watchEffect } from 'vue';
+  import { computed, ref, watch, watchEffect } from 'vue';
   import { ToDoItem } from '../models/todoitem-model';
   import ToDoCard from './ToDoCard.vue';
   import PageHeader from './PageHeader.vue';
   import ToDoPlaceHolder from './ToDoListPlaceHolder.vue';
   import EditableToDo from './EditableToDo.vue';
+  import SearchBar from './SearchBar.vue';
 
   const storageItems = localStorage.getItem('listOfItems');
 
@@ -55,9 +61,17 @@
     storageItems ? JSON.parse(storageItems) : []
   );
 
+  const isContentFiltered = ref(false);
+
+  const displayItems = ref(listItems.value);
+
   const isFormShown = ref(false);
 
   const shownItemIndex = ref(-1);
+
+  const isSearchbarShown = computed(() => {
+    return !isPlaceholderShown.value && !isFormShown.value;
+  });
 
   const isPlaceholderShown = computed(() => {
     if (isFormShown.value) {
@@ -65,6 +79,21 @@
     }
     return listItems.value.length === 0;
   });
+
+  function searchToDo(searchString: string) {
+    if (searchString === '') {
+      displayItems.value = listItems.value;
+      isContentFiltered.value = false;
+      return;
+    }
+    isContentFiltered.value = true;
+    const matchingTitleArray = listItems.value.filter((el) => {
+      if (el.title === searchString || el.text.includes(searchString)) {
+        return el;
+      }
+    });
+    displayItems.value = matchingTitleArray;
+  }
 
   function toggleResolvedStatus(ind: number) {
     listItems.value[ind].isResolved = !listItems.value[ind].isResolved;
@@ -109,6 +138,10 @@
 
   watchEffect(() => {
     localStorage.setItem('listOfItems', JSON.stringify(listItems.value));
+    if (isContentFiltered) {
+      return;
+    }
+    displayItems.value = listItems.value;
   });
 </script>
 
