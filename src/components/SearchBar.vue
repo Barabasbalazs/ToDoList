@@ -19,7 +19,7 @@
       >
         <p class="pl-1">X</p>
       </PrimaryButton>
-      <PrimaryButton class="bg-black rounded-xl p-2" 
+      <PrimaryButton class="bg-black rounded-xl p-2 text-sm" 
         :disabled="isSearchButtonDisabled"
         @click="search">
         <p>Search</p>

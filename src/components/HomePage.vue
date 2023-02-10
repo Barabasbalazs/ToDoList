@@ -14,6 +14,7 @@
       class="mb-8"
       @search-according-to="searchToDo"
     />
+    <FilterBar/>
     <ToDoPlaceHolder v-if="isPlaceholderShown" />
     <TransitionGroup
       v-else
@@ -54,6 +55,7 @@
   import ToDoPlaceHolder from './ToDoListPlaceHolder.vue';
   import EditableToDo from './EditableToDo.vue';
   import SearchBar from './SearchBar.vue';
+  import FilterBar from './FilterBar.vue';
 
   const storageItems = localStorage.getItem('listOfItems');
 
