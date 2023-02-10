@@ -11,7 +11,9 @@
     </Transition>
     <div v-if="isSearchbarShown">
       <SearchBar class="mb-8" @search-according-to="searchToDo" />
-      <FilterBar />
+      <FilterBar
+        @filter-by="filterToDos" 
+      />
     </div>
     <ToDoPlaceHolder v-if="isPlaceholderShown" />
     <TransitionGroup
@@ -46,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref, watch, watchEffect } from 'vue';
+  import { computed, ref, watchEffect } from 'vue';
   import { ToDoItem } from '../models/todoitem-model';
   import ToDoCard from './ToDoCard.vue';
   import PageHeader from './PageHeader.vue';
@@ -54,6 +56,7 @@
   import EditableToDo from './EditableToDo.vue';
   import SearchBar from './SearchBar.vue';
   import FilterBar from './FilterBar.vue';
+  import { sortByTitle, sortByText, sortByPriority, sortByDate } from '../utils/sorting-functions';
 
   const storageItems = localStorage.getItem('listOfItems');
 
@@ -134,6 +137,22 @@
   function updateToDo(ind: Number, newToDo: ToDoItem) {
     listItems.value[ind.valueOf()] = newToDo;
     toggleToDoEditState();
+  }
+
+  function filterToDos(filterCategory: string, order: number) {
+    if (filterCategory === '') {
+      return;
+    }
+    const currentToDosOnDisplay = displayItems.value.slice();
+    if (filterCategory === 'Title') {
+      displayItems.value = sortByTitle(currentToDosOnDisplay, order);
+    } else if (filterCategory === 'Text') {
+      displayItems.value = sortByText(currentToDosOnDisplay, order);
+    } else if (filterCategory === 'Date') {
+      displayItems.value = sortByDate(currentToDosOnDisplay, order);
+    } else if (filterCategory === 'Priority') {
+      displayItems.value = sortByPriority(currentToDosOnDisplay, order);
+    }
   }
 
   watchEffect(() => {
