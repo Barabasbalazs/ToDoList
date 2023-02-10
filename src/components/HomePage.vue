@@ -11,9 +11,7 @@
     </Transition>
     <div v-if="isSearchbarShown">
       <SearchBar class="mb-8" @search-according-to="searchToDo" />
-      <FilterBar
-        @filter-by="filterToDos" 
-      />
+      <FilterBar @filter-by="filterToDos" />
     </div>
     <ToDoPlaceHolder v-if="isPlaceholderShown" />
     <TransitionGroup
@@ -56,7 +54,12 @@
   import EditableToDo from './EditableToDo.vue';
   import SearchBar from './SearchBar.vue';
   import FilterBar from './FilterBar.vue';
-  import { sortByTitle, sortByText, sortByPriority, sortByDate } from '../utils/sorting-functions';
+  import {
+    sortByTitle,
+    sortByText,
+    sortByPriority,
+    sortByDate,
+  } from '../utils/sorting-functions';
 
   const storageItems = localStorage.getItem('listOfItems');
 
