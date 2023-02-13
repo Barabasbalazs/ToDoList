@@ -7,11 +7,7 @@ const priorityMap = {
   [Priority.high]: 2,
 } as const;
 
-export function sortBySpecificKey(
-  // key: keyof Omit<ToDoItem, 'isResolved' | 'id'>,
-  key: FilterType,
-  order: number
-) {
+export function sortBySpecificKey(key: FilterType, order: number) {
   return function (a: ToDoItem, b: ToDoItem) {
     let stringOfA: string | number = a[key].toLowerCase();
     let stringOfB: string | number = b[key].toLowerCase();

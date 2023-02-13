@@ -99,13 +99,12 @@
     displayItems.value = matchingTitleArray;
   }
 
-  // note to myself there is a bug if trying to resolve card while filter is active!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   function toggleResolvedStatus(ind: number) {
-    listItems.value[ind].isResolved = !listItems.value[ind].isResolved;
-    if (listItems.value[ind].isResolved) {
-      listItems.value.push(listItems.value.splice(ind, 1)[0]);
+    displayItems.value[ind].isResolved = !displayItems.value[ind].isResolved;
+    if (displayItems.value[ind].isResolved) {
+      displayItems.value.push(displayItems.value.splice(ind, 1)[0]);
     } else {
-      listItems.value.unshift(listItems.value.splice(ind, 1)[0]);
+      displayItems.value.unshift(displayItems.value.splice(ind, 1)[0]);
     }
   }
 
@@ -156,6 +155,12 @@
 </script>
 
 <style>
+  @import url('https://fonts.cdnfonts.com/css/neue-haas-grotesk-display-pro');
+      
+  * {
+    font-family: 'Neue Haas Grotesk Display Pro', sans-serif;
+  }
+
   .list-move,
   .list-enter-active,
   .list-leave-active {

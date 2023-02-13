@@ -8,7 +8,7 @@
         :class="getColorOfFilterButton(currentFilter)"
         @click="doFilter(currentFilter)"
       >
-        <p>{{ currentFilter }}</p>
+        <p>{{ getFilterButtonText(currentFilter) }}</p>
       </PrimaryButton>
     </div>
     <div class="flex space-x-2 self-start">
@@ -34,6 +34,7 @@
   import { ref } from 'vue';
   import PrimaryButton from './PrimaryButton.vue';
   import { FilterType } from '../types/filter-type';
+  import { capitalizeText } from '../utils/text-formating';
   
   const filterList = ['title' as const, 'text' as const, 'priority' as const, 'createdAt' as const];
 
@@ -44,6 +45,16 @@
   }>();
 
   const orderOfFiltering = ref(1);
+
+  function getFilterButtonText(filter: FilterType) {
+    if (filter === 'createdAt') {
+      return 'Date';
+    }
+    if (filter === 'text') {
+      return 'Description';
+    }
+    return capitalizeText(filter);
+  }
 
   function getColorOfFilterButton(valueOfButton: FilterType) {
     return valueOfButton === currentFilter.value
