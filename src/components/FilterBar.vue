@@ -36,7 +36,7 @@
   import { FilterType } from '../types/filter-type';
   import { capitalizeText } from '../utils/text-formating';
   
-  const filterList = ['title' as const, 'text' as const, 'priority' as const, 'createdAt' as const];
+  const filterList = ['title', 'text', 'priority', 'createdAt'] as const;
 
   const currentFilter = ref();
 

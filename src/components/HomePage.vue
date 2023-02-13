@@ -155,12 +155,6 @@
 </script>
 
 <style>
-  @import url('https://fonts.cdnfonts.com/css/neue-haas-grotesk-display-pro');
-      
-  * {
-    font-family: 'Neue Haas Grotesk Display Pro', sans-serif;
-  }
-
   .list-move,
   .list-enter-active,
   .list-leave-active {
