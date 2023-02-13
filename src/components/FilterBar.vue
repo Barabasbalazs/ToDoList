@@ -74,7 +74,9 @@
   }
 
   function changeFilterOrder(order: number) {
-    orderOfFiltering.value = order;
-    emit('filterBy', currentFilter.value, orderOfFiltering.value);
+    if (currentFilter.value) {
+      orderOfFiltering.value = order;
+      emit('filterBy', currentFilter.value, orderOfFiltering.value);
+    }
   }
 </script>
