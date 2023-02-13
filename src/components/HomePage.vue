@@ -26,7 +26,7 @@
         class="space-y-8"
       >
         <EditableToDo
-          v-if="shownItemIndex === index"
+          v-if="shownItemID === item.id"
           v-click-away="toggleToDoEditState"
           :item="item"
           :index="index"
@@ -37,7 +37,7 @@
         <ToDoCard
           v-else
           :item="item"
-          @click="changeSelectedCard(index)"
+          @click="changeSelectedCard(item.id)"
           @toggle-resolved-status="toggleResolvedStatus(index)"
         />
       </div>
@@ -71,10 +71,10 @@
 
   const isFormShown = ref(false);
 
-  const shownItemIndex = ref(-1);
+  const shownItemID = ref(-1);
 
   const isSearchbarShown = computed(() => {
-    return !isPlaceholderShown.value && !isFormShown.value;
+    return !isPlaceholderShown.value;
   });
 
   const isPlaceholderShown = computed(() => {
@@ -92,7 +92,7 @@
     }
     isContentFiltered.value = true;
     const matchingTitleArray = listItems.value.filter((el) => {
-      if (el.title === searchString || el.text.includes(searchString)) {
+      if (el.title.includes(searchString) || el.text.includes(searchString)) {
         return el;
       }
     });
@@ -109,11 +109,11 @@
   }
 
   function toggleToDoEditState() {
-    shownItemIndex.value = -1;
+    shownItemID.value = -1;
   }
 
-  function changeSelectedCard(ind: number) {
-    shownItemIndex.value = ind;
+  function changeSelectedCard(id: number) {
+    shownItemID.value = id;
   }
 
   function removeTodo(ind: Number) {

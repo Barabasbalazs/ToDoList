@@ -16,7 +16,7 @@
           v-model="currentTitle"
           type="text"
           placeholder="Title"
-          class="w-[197px] font-semibold text-lg lg:text-4xl"
+          class="w-4/5 font-semibold text-lg lg:text-4xl"
           :class="currentOpacity"
           :disabled="isDropDownShown"
         />
