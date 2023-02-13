@@ -175,7 +175,7 @@
       id: Math.random() * 1000,
       title: currentTitle.value,
       text: currentText.value,
-      createdAt: new Date(),
+      createdAt: new Date().toDateString(),
       priority: currentPriority.value,
       isResolved: false,
     };

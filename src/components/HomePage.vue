@@ -9,11 +9,10 @@
         @hide-form="hideToDoForm"
       />
     </Transition>
-    <SearchBar
-      v-if="isSearchbarShown"
-      class="mb-8"
-      @search-according-to="searchToDo"
-    />
+    <div v-if="isSearchbarShown">
+      <SearchBar class="mb-8" @search-according-to="searchToDo" />
+      <FilterBar @filter-by="filterToDos" />
+    </div>
     <ToDoPlaceHolder v-if="isPlaceholderShown" />
     <TransitionGroup
       v-else
@@ -47,13 +46,18 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref, watch, watchEffect } from 'vue';
+  import { computed, ref, watchEffect } from 'vue';
   import { ToDoItem } from '../models/todoitem-model';
   import ToDoCard from './ToDoCard.vue';
   import PageHeader from './PageHeader.vue';
   import ToDoPlaceHolder from './ToDoListPlaceHolder.vue';
   import EditableToDo from './EditableToDo.vue';
   import SearchBar from './SearchBar.vue';
+  import FilterBar from './FilterBar.vue';
+  import {
+    sortBySpecificKey
+  } from '../utils/sorting-functions';
+  import { FilterType } from '../types/filter-type';
 
   const storageItems = localStorage.getItem('listOfItems');
 
@@ -96,11 +100,11 @@
   }
 
   function toggleResolvedStatus(ind: number) {
-    listItems.value[ind].isResolved = !listItems.value[ind].isResolved;
-    if (listItems.value[ind].isResolved) {
-      listItems.value.push(listItems.value.splice(ind, 1)[0]);
+    displayItems.value[ind].isResolved = !displayItems.value[ind].isResolved;
+    if (displayItems.value[ind].isResolved) {
+      displayItems.value.push(displayItems.value.splice(ind, 1)[0]);
     } else {
-      listItems.value.unshift(listItems.value.splice(ind, 1)[0]);
+      displayItems.value.unshift(displayItems.value.splice(ind, 1)[0]);
     }
   }
 
@@ -134,6 +138,11 @@
   function updateToDo(ind: Number, newToDo: ToDoItem) {
     listItems.value[ind.valueOf()] = newToDo;
     toggleToDoEditState();
+  }
+
+  function filterToDos(filter: FilterType, order: number) {
+    const currentToDosOnDisplay = displayItems.value.slice();
+    displayItems.value = currentToDosOnDisplay.sort(sortBySpecificKey(filter, order));
   }
 
   watchEffect(() => {
