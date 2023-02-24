@@ -4,7 +4,10 @@
       <h1>Welcome to the To do list App!</h1>
       <p>Login</p>
     </div>
-    <RegisterFormComp class="border-black border-2 rounded-xl w-4/6 lg:w-1/5 p-2" />
+    <UserInputComp
+      class="border-black border-2 rounded-xl w-4/6 lg:w-1/5 p-2"
+      @changed-input="changeInput"
+    />
     <PrimaryButton class="border-2 border-black rounded-xl p-2 bg-green"
       ><p>Login</p></PrimaryButton
     >
@@ -15,7 +18,16 @@
 
 <script setup lang="ts">
   import { ref } from 'vue';
+  import { User } from '../types/user';
   import PrimaryButton from './PrimaryButton.vue';
-  import RegisterFormComp from './UserInputComp.vue';
+  import UserInputComp from './UserInputComp.vue';
 
+  const currentUserInput = ref({
+    password: '',
+    email: '',
+  });
+
+  function changeInput(userInput: User) {
+    currentUserInput.value = userInput;
+  }
 </script>

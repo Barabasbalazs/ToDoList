@@ -1,9 +1,3 @@
-<script setup lang="ts">
-  import HomePage from './components/HomePage.vue';
-  import LoginPage from './components/LoginPage.vue';
-  import RegisterPage from './components/RegisterPage.vue';
-</script>
-
 <template>
   <router-view v-slot="{ Component }">
     <component :is="Component" />

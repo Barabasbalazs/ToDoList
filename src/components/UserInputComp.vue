@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="flex flex-col space-y-2"
-  >
+  <div class="flex flex-col space-y-2">
     <input v-model="email" type="text" placeholder="Email" />
     <div class="flex justify-between flex-wrap">
       <input
@@ -21,11 +19,16 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref } from 'vue';
+  import { computed, ref, watchEffect } from 'vue';
+  import { User } from '../types/user';
   import PrimaryButton from './PrimaryButton.vue';
 
-  const email = ref('');
+  const emit = defineEmits<{
+    (e: 'changedInput', userInput: User): void;
+  }>();
+
   const password = ref('');
+  const email = ref('');
 
   const isPasswordShown = ref(false);
 
@@ -44,4 +47,11 @@
   function togglePassword() {
     isPasswordShown.value = !isPasswordShown.value;
   }
+  watchEffect(() => {
+    const userInput = {
+      email: email.value,
+      password: password.value,
+    };
+    emit('changedInput', userInput);
+  });
 </script>
