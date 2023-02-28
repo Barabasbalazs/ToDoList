@@ -18,22 +18,16 @@
       @changed-input="changeInput"
     />
     <PrimaryButton
-      v-if="isLoading"
-      class="border-2 border-black rounded-xl p-2 px-4 bg-green"
-      disabled
-      ><svg class="svg-container" height="25" width="25" viewBox="0 0 100 100">
-        <circle class="loader-svg bg" cx="50" cy="50" r="45"></circle>
-        <circle class="loader-svg animate" cx="50" cy="50" r="45"></circle>
-      </svg>
-    </PrimaryButton>
-    <PrimaryButton
-      v-else
       class="border-2 border-black rounded-xl p-2 bg-green"
       @click="login"
+      :disabled="isLoading"
+      :is-loading="isLoading"
       ><p>Login</p></PrimaryButton
     >
     <p>Don't have an Account yet?</p>
-    <p class="text-blue hover:underline">Register here</p>
+    <router-link to="/register" class="text-blue hover:underline"
+      >Register here</router-link
+    >
   </div>
 </template>
 
@@ -42,11 +36,12 @@
   import { User } from '../types/user';
   import PrimaryButton from './PrimaryButton.vue';
   import UserInputComp from './UserInputComp.vue';
-  import { useUserStore } from '../stores/user';
+  import { useAuthStore } from '../stores/authentication';
   import ConfirmationModal from './ConfirmationModal.vue';
   import router from '../router/router';
+  import { isEmptyInput } from '../utils/input-validation';
 
-  const userStore = useUserStore();
+  const authStore = useAuthStore();
 
   const isLoading = ref(false);
 
@@ -62,9 +57,13 @@
   }
 
   async function login() {
+    if (isEmptyInput(currentUserInput.value)) {
+      isPopUpShown.value = true;
+      return;
+    }
     try {
       isLoading.value = true;
-      const res = await userStore.login(currentUserInput.value);
+      const res = await authStore.login(currentUserInput.value);
       if (!res) {
         isPopUpShown.value = true;
         return;
@@ -79,46 +78,3 @@
     isPopUpShown.value = false;
   }
 </script>
-
-<style scoped>
-  .svg-loader {
-    display: flex;
-    position: relative;
-    align-content: space-around;
-    justify-content: center;
-  }
-  .loader-svg {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    fill: none;
-    stroke-width: 5px;
-    stroke-linecap: round;
-    stroke: rgb(0, 148, 25);
-  }
-  .loader-svg.bg {
-    stroke-width: 8px;
-    stroke: rgb(207, 205, 245);
-  }
-  .animate {
-    stroke-dasharray: 242.6;
-    animation: fill-animation 1s cubic-bezier(1, 1, 1, 1) 0s infinite;
-  }
-
-  @keyframes fill-animation {
-    0% {
-      stroke-dasharray: 40 242.6;
-      stroke-dashoffset: 0;
-    }
-    50% {
-      stroke-dasharray: 141.3;
-      stroke-dashoffset: 141.3;
-    }
-    100% {
-      stroke-dasharray: 40 242.6;
-      stroke-dashoffset: 282.6;
-    }
-  }
-</style>

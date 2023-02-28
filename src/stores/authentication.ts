@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { User } from '../types/user';
 import { authService } from '../services/auth-service';
 
-export const useUserStore = defineStore('user', {
+export const useAuthStore = defineStore('authentication', {
   state: () => ({
     user: {} as User,
     authToken: '' as string,
@@ -18,7 +18,6 @@ export const useUserStore = defineStore('user', {
       return false;
     },
     async logout() {},
-    async register() {},
   },
   persist: {
     enabled: true,

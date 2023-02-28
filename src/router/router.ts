@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "../components/HomePage.vue";
 import LoginPage from "../components/LoginPage.vue";
 import RegisterPage from "../components/RegisterPage.vue";
-import { useUserStore } from "../stores/user";
+import { useAuthStore } from "../stores/authentication";
 
 const routes = [
   { path: '/', component: HomePage },
@@ -16,11 +16,11 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, _from, next) => {
-    const userStore = useUserStore();
-    if (to.path === '/' && userStore.authToken === '') {
+    const authStore = useAuthStore();
+    if (to.path === '/' && authStore.authToken === '') {
         return next('/login');
     }
-    if (to.path === '/login' && userStore.authToken !== '') {
+    if (to.path === '/login' && authStore.authToken !== '') {
         return next('/');
     }
     return next();
