@@ -1,7 +1,7 @@
 const envVariables = {
-    authUrl : () => {
-        const baseUrl = import.meta.env.APIURL || "localhost:8080/api";
-        return `${baseUrl}/auth`;
+    authUrl : (): string => {
+        const baseUrl = import.meta.env.APIURL || "http://127.0.0.1:8080/api";
+        return `${baseUrl}/auth` as const;
     }
 }
 

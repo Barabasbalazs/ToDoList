@@ -8,20 +8,10 @@ import RegisterPage from './components/RegisterPage.vue';
 import VueClickAway from 'vue3-click-away';
 import { createPinia } from 'pinia';
 import piniaPersist from 'pinia-plugin-persist';
+import router from './router/router';
 
 const pinia = createPinia();
 pinia.use(piniaPersist);
-
-const routes = [
-  { path: '/', component: HomePage },
-  { path: '/login', component: LoginPage },
-  { path: '/register', component: RegisterPage },
-];
-
-const router = createRouter({
-  history: createWebHistory(),
-  routes,
-});
 
 const app = createApp(App);
 

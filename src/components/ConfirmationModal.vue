@@ -9,7 +9,14 @@
       <p class="m-2">
         {{ text }}
       </p>
-      <div class="flex flex-row space-x-6 mb-2 font-semibold">
+      <div v-if="isLoginModal" class="flex flex-row space-x-6 mb-2 font-semibold">
+        <PrimaryButton class="bg-green px-5 py-2"
+          :modalButton="true"
+          @click="hidePopUp">
+          Ok
+        </PrimaryButton>
+      </div>
+      <div v-else class="flex flex-row space-x-6 mb-2 font-semibold">
         <PrimaryButton
           class="bg-green px-5 py-2"
           :modalButton="true"
@@ -31,6 +38,10 @@
   import PrimaryButton from './PrimaryButton.vue';
 
   defineProps({
+    isLoginModal: {
+      type: Boolean,
+      default: false,
+    },
     title: {
       type: String,
       default: '',
