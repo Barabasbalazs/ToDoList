@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
   import { ref, computed } from 'vue';
-  import { User } from '../types/user';
+  import { User } from '../models/userr';
   import PrimaryButton from './PrimaryButton.vue';
   import UserInputComp from './UserInputComp.vue';
   import ConfirmationModal from './ConfirmationModal.vue';

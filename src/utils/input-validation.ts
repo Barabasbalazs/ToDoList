@@ -1,4 +1,4 @@
-import { User } from "../types/user";
+import { User } from "../models/user-model";
 
 export function isEmptyInput(user: User) {
   if (user.email === '' || user.password === '') {

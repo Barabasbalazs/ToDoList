@@ -40,6 +40,7 @@
   import { useAuthStore } from '../stores/authentication';
   import { computed, ref } from 'vue';
   import router from '../router/router';
+  import ConfirmationModal from './ConfirmationModal.vue';
 
   const isPopUpShown = ref(false);
 

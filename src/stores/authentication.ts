@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { User } from '../types/user';
+import { User } from '../models/user-model';
 import { authService } from '../services/auth-service';
 
 export const useAuthStore = defineStore('authentication', {
@@ -21,10 +21,7 @@ export const useAuthStore = defineStore('authentication', {
       const resp = await authService.logout(this.authToken);
       this.user = {} as User;
       this.authToken = '';
-      if (resp.status !== 200) {
-        return false;
-      }
-      return true;
+      return resp;
     },
   },
   persist: {

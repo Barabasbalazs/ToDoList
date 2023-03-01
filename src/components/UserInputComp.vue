@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
   import { computed, ref, watchEffect } from 'vue';
-  import { User } from '../types/user';
+  import { User } from '../models/userr';
   import PrimaryButton from './PrimaryButton.vue';
 
   const emit = defineEmits<{
