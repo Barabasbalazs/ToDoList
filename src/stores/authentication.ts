@@ -17,9 +17,23 @@ export const useAuthStore = defineStore('authentication', {
       }
       return false;
     },
-    async logout() {},
+    async logout() {
+      const resp = await authService.logout(this.authToken);
+      this.user = {} as User;
+      this.authToken = '';
+      if (resp.status !== 200) {
+        return false;
+      }
+      return true;
+    },
   },
   persist: {
     enabled: true,
+    strategies: [
+      {
+        key: 'auth',
+        storage: localStorage
+      }
+    ]
   }
 });

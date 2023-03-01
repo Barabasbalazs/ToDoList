@@ -31,5 +31,19 @@ export const authService = {
       return false;
     }
     return response;
+  },
+  logout: async(authToken: string) => {
+    const resp = await fetch(`${authUrl}/logout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${authToken}`
+      },
+    });
+    const response = await resp.json();
+    if (response.status === 401) {
+      return false;
+    }
+    return response;
   }
 };
