@@ -1,0 +1,1 @@
+export type PriorityNumberType = 0 | 1 | 2;

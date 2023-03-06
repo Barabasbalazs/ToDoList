@@ -9,6 +9,14 @@
         @hide-form="hideToDoForm"
       />
     </Transition>
+    <Transition>
+        <ConfirmationModal
+          v-if="isErrorShown"
+          title="Warning"
+          text="There has been an error"
+          @hide-pop-up="hideError"
+        />
+      </Transition>
     <div v-if="isSearchbarShown">
       <SearchBar class="mb-8" @search-according-to="searchToDo" />
       <FilterBar @filter-by="filterToDos" />
@@ -20,13 +28,9 @@
       tag="div"
       class="flex flex-col space-y-8"
     >
-      <div
-        v-for="(item, index) in displayItems"
-        :key="item.id"
-        class="space-y-8"
-      >
+      <div v-for="(item, index) in listItems" :key="item._id" class="space-y-8">
         <EditableToDo
-          v-if="shownItemID === item.id"
+          v-if="shownItemID === item._id"
           v-click-away="toggleToDoEditState"
           :item="item"
           :index="index"
@@ -37,8 +41,8 @@
         <ToDoCard
           v-else
           :item="item"
-          @click="changeSelectedCard(item.id)"
-          @toggle-resolved-status="toggleResolvedStatus(index)"
+          @click="changeSelectedCard(item._id)"
+          @toggle-resolved-status="toggleResolvedStatus(index, item._id, item.isResolved)"
         />
       </div>
     </TransitionGroup>
@@ -46,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref, watchEffect } from 'vue';
+  import { computed, ref, onMounted } from 'vue';
   import { ToDoItem } from '../models/todoitem-model';
   import ToDoCard from './ToDoCard.vue';
   import PageHeader from './PageHeader.vue';
@@ -54,24 +58,23 @@
   import EditableToDo from './EditableToDo.vue';
   import SearchBar from './SearchBar.vue';
   import FilterBar from './FilterBar.vue';
-  import {
-    sortBySpecificKey
-  } from '../utils/sorting-functions';
   import { FilterType } from '../types/filter-type';
+  import { useTodoStore } from '../stores/todo';
+  import ConfirmationModal from './ConfirmationModal.vue';
 
-  const storageItems = localStorage.getItem('listOfItems');
+  const order = ref('asc');
+  const sort = ref('isResolved');
+  const search = ref('');
 
-  const listItems = ref<Array<ToDoItem>>(
-    storageItems ? JSON.parse(storageItems) : []
-  );
+  const isErrorShown = ref(false);
 
-  const isContentFiltered = ref(false);
+  const todoStore = useTodoStore();
 
-  const displayItems = ref(listItems.value);
+  const listItems = computed(() => todoStore.todos);
 
   const isFormShown = ref(false);
 
-  const shownItemID = ref(-1);
+  const shownItemID = ref('');
 
   const isSearchbarShown = computed(() => {
     return !isPlaceholderShown.value;
@@ -84,41 +87,48 @@
     return listItems.value.length === 0;
   });
 
-  function searchToDo(searchString: string) {
-    if (searchString === '') {
-      displayItems.value = listItems.value;
-      isContentFiltered.value = false;
-      return;
+  onMounted(async () => {
+    try {
+      await todoStore.getToDos(sort.value, order.value);
+    } catch (e) {
+      isErrorShown.value = true;
     }
-    isContentFiltered.value = true;
-    const matchingTitleArray = listItems.value.filter((el) => {
-      if (el.title.includes(searchString) || el.text.includes(searchString)) {
-        return el;
-      }
-    });
-    displayItems.value = matchingTitleArray;
+  });
+
+  async function searchToDo(searchString: string) {
+    search.value = searchString;
+    try {
+      await todoStore.getToDos(sort.value, order.value, search.value);
+    } catch (e) {
+      isErrorShown.value = true;
+    }
   }
 
-  function toggleResolvedStatus(ind: number) {
-    displayItems.value[ind].isResolved = !displayItems.value[ind].isResolved;
-    if (displayItems.value[ind].isResolved) {
-      displayItems.value.push(displayItems.value.splice(ind, 1)[0]);
-    } else {
-      displayItems.value.unshift(displayItems.value.splice(ind, 1)[0]);
+  async function toggleResolvedStatus(ind: number, _id: string, isResolvedStatus: boolean) {
+    try {
+      const orderOfItems = (isResolvedStatus) ? 1 : -1;
+      await todoStore.updateToDo(ind, {_id, isResolved: !isResolvedStatus} , orderOfItems);
+      toggleToDoEditState();
+    } catch (e) {
+      isErrorShown.value = true;
     }
   }
 
   function toggleToDoEditState() {
-    shownItemID.value = -1;
+    shownItemID.value = '';
   }
 
-  function changeSelectedCard(id: number) {
+  function changeSelectedCard(id: string) {
     shownItemID.value = id;
   }
 
-  function removeTodo(ind: Number) {
-    listItems.value.splice(ind.valueOf(), 1);
-    toggleToDoEditState();
+  async function removeTodo(ind: number) {
+    try {
+      todoStore.removeToDo(ind, listItems.value[ind]);
+      toggleToDoEditState();
+    } catch (e) {
+      isErrorShown.value = true;
+    }
   }
 
   function showToDoForm() {
@@ -130,28 +140,37 @@
     isFormShown.value = false;
   }
 
-  function addToDo(newToDo: ToDoItem) {
-    listItems.value.unshift(newToDo);
-    isFormShown.value = false;
+  function hideError() {
+    isErrorShown.value = false;
   }
 
-  function updateToDo(ind: Number, newToDo: ToDoItem) {
-    listItems.value[ind.valueOf()] = newToDo;
-    toggleToDoEditState();
-  }
-
-  function filterToDos(filter: FilterType, order: number) {
-    const currentToDosOnDisplay = displayItems.value.slice();
-    displayItems.value = currentToDosOnDisplay.sort(sortBySpecificKey(filter, order));
-  }
-
-  watchEffect(() => {
-    localStorage.setItem('listOfItems', JSON.stringify(listItems.value));
-    if (isContentFiltered) {
-      return;
+  async function addToDo(newToDo: Partial<ToDoItem>) {
+    try {
+      await todoStore.addToDo(newToDo);
+      isFormShown.value = false;
+    } catch (e) {
+      isErrorShown.value = true;
     }
-    displayItems.value = listItems.value;
-  });
+  }
+
+  async function updateToDo(ind: number, newToDo: Partial<ToDoItem>) {
+    try {
+      await todoStore.updateToDo(ind, newToDo);
+      toggleToDoEditState();
+    } catch (e) {
+      isErrorShown.value = true;
+    }
+  }
+
+  async function filterToDos(filter: FilterType, orderBy: number) {
+    sort.value = filter;
+    order.value = orderBy === 1 ? 'asc' : 'desc';
+    try {
+      await todoStore.getToDos(sort.value, order.value, search.value);
+    } catch (e) {
+      isErrorShown.value = true;
+    }
+  }
 </script>
 
 <style>

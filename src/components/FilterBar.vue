@@ -34,11 +34,10 @@
   import { ref } from 'vue';
   import PrimaryButton from './PrimaryButton.vue';
   import { FilterType } from '../types/filter-type';
-  import { capitalizeText } from '../utils/text-formating';
   
   const filterList = ['title', 'text', 'priority', 'createdAt'] as const;
 
-  const currentFilter = ref();
+  const currentFilter = ref('createdAt' as FilterType);
 
   const emit = defineEmits<{
     (e: 'filterBy', filter: FilterType, order: number): void;
@@ -47,13 +46,7 @@
   const orderOfFiltering = ref(1);
 
   function getFilterButtonText(filter: FilterType) {
-    if (filter === 'createdAt') {
-      return 'Date';
-    }
-    if (filter === 'text') {
-      return 'Description';
-    }
-    return capitalizeText(filter);
+    return filter;
   }
 
   function getColorOfFilterButton(valueOfButton: FilterType) {

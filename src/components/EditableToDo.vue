@@ -96,7 +96,7 @@
   import { computed, ref, PropType } from 'vue';
   import { Priority, ToDoItem } from '../models/todoitem-model';
   import { formatShortDate } from '../utils/date-formatting';
-  import { getItemPriority } from '../utils/item-priority';
+  import { getItemPriority, getItemPriorityInNumbers } from '../utils/item-priority';
   import ConfirmationModal from './ConfirmationModal.vue';
   import PrimaryButton from './PrimaryButton.vue';
 
@@ -112,10 +112,10 @@
   });
 
   const emit = defineEmits<{
-    (e: 'removeItem', ind: Number): void;
-    (e: 'addToDo', newToDo: ToDoItem): void;
+    (e: 'removeItem', ind: number): void;
+    (e: 'addToDo', newToDo: Partial<ToDoItem>): void;
     (e: 'hideForm'): void;
-    (e: 'updateToDo', ind: Number, newToDo: ToDoItem): void;
+    (e: 'updateToDo', ind: number, newToDo: Partial<ToDoItem>): void;
   }>();
 
   const isDropDownShown = ref(false);
@@ -148,7 +148,7 @@
     if (isDropDownShown.value) {
       return 'text-black bg-white border-2 border-black' as const;
     }
-    return getItemPriority(currentPriority.value);
+    return getItemPriority(currentPriority.value as Priority);
   });
 
   function styleOfPriorityButton(ind: number) {
@@ -172,12 +172,10 @@
 
   function saveToDo() {
     const newToDo = {
-      id: Math.random() * 1000,
+      _id: props.item?._id,
       title: currentTitle.value,
-      text: currentText.value,
-      createdAt: new Date().toDateString(),
-      priority: currentPriority.value,
-      isResolved: false,
+      priority: getItemPriorityInNumbers(currentPriority.value as Priority),
+      ... (currentText.value !== '' && { text: currentText.value } ),
     };
     if (props.index === -1) {
       emit('addToDo', newToDo);

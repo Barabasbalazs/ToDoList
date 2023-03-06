@@ -66,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ToDoItem } from '../models/todoitem-model';
+  import { Priority, ToDoItem } from '../models/todoitem-model';
   import { formatShortDate } from '../utils/date-formatting';
   import { computed } from 'vue';
   import { getItemPriority } from '../utils/item-priority';
@@ -83,7 +83,7 @@
 
   const date = new Date(props.item.createdAt);
 
-  const priorityClass = computed(() => getItemPriority(props.item.priority));
+  const priorityClass = computed(() => getItemPriority(props.item.priority as Priority));
 
   const colorOfCheckCircle = computed(() => {
     return isResolved.value

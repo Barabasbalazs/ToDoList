@@ -5,10 +5,11 @@ export enum Priority {
 }
 
 export interface ToDoItem {
-  id: number;
+  id?: string;
+  _id: string;
   title: string;
   text: string;
-  priority: Priority;
+  priority: Priority | number;
   createdAt: string;
   isResolved: boolean;
 }
