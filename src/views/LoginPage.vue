@@ -33,13 +33,13 @@
 
 <script setup lang="ts">
   import { ref } from 'vue';
-  import { User } from '../models/userr';
-  import PrimaryButton from './PrimaryButton.vue';
-  import UserInputComp from './UserInputComp.vue';
-  import { useAuthStore } from '../stores/authentication';
-  import ConfirmationModal from './ConfirmationModal.vue';
-  import router from '../router/router';
+  import { User } from '../models/user-model';
   import { isEmptyInput } from '../utils/input-validation';
+  import { useAuthStore } from '../stores/authentication';
+  import router from '../router/router';
+  import PrimaryButton from '../components/PrimaryButton.vue';
+  import UserInputComp from '../components/UserInputComp.vue';
+  import ConfirmationModal from '../components/ConfirmationModal.vue';
 
   const authStore = useAuthStore();
 

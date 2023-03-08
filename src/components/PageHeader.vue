@@ -11,7 +11,7 @@
       </Transition>
       <div class="flex flex-col text-black lg:text-lg font-medium">
         <p>Welcome</p>
-        <p>{{ `${user.firstName} ${user.lastName}` }}</p>
+        <p>{{ userName }}</p>
       </div>
       <PrimaryButton class="rounded-xl p-3 border-2 lg:hidden" @click="logout">
         <img src="../assets/icons/Loginlogout.svg" />
@@ -47,6 +47,10 @@
   const authStore = useAuthStore();
 
   const user = computed(() => authStore.user);
+
+  const userName = computed(
+    () => `${user.value.firstName} ${user.value.lastName}`
+  );
 
   const emit = defineEmits<{
     (e: 'showForm'): void;

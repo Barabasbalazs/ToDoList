@@ -1,42 +1,25 @@
 import envVariables from '../config/env-variables';
-import { Priority, ToDoItem } from '../models/todoitem-model';
+import { ToDoItem } from '../models/todoitem-model';
 import { RequestParameters } from '../types/request-parameter-type';
-import { fetchReq } from '../utils/fetch-requests';
-import { getItemPriorityInNumbers } from '../utils/item-priority';
+import { handleRequest, handleResponse } from '../utils/fetch-requests';
 
 const todoUrl = envVariables.todoUrl();
 
 export const todoService = {
   getAll: async (authToken: string, params: RequestParameters) => {
-    const resp = await fetchReq(`${todoUrl}`, 'GET', authToken, params);
-    if (resp.status === 200 || resp.status < 300) {
-      const response = await resp.json();
-      return response;
-    }
-    return false;
+    const resp = await handleRequest(`${todoUrl}`, 'GET', authToken, params);
+    return await handleResponse(resp);
   },
   addToDo: async (authToken: string, todo: Partial<ToDoItem>) => {
-    const resp = await fetchReq(`${todoUrl}`, 'POST', authToken, todo);
-    if (resp.status === 200 || resp.status < 300) {
-      const response = await resp.json();
-      return response;
-    }
-    return false;
+    const resp = await handleRequest(`${todoUrl}`, 'POST', authToken, todo);
+    return await handleResponse(resp);
   },
   removeToDo: async (authToken: string, id: string) => {
-    const resp = await fetchReq(`${todoUrl}`, 'DELETE', authToken, {id});
-    if (resp.status === 200 || resp.status < 300) {
-      const response = await resp.json();
-      return response;
-    }
-    return false;
+    const resp = await handleRequest(`${todoUrl}`, 'DELETE', authToken, {id});
+    return await handleResponse(resp);
   },
   updateToDo: async (authToken: string ,todo: Partial<ToDoItem>) => {
-    const resp = await fetchReq(`${todoUrl}`, 'PUT', authToken, {id: todo._id, todo});
-    if (resp.status === 200 || resp.status < 300) {
-      const response = await resp.json();
-      return response;
-    }
-    return false;
+    const resp = await handleRequest(`${todoUrl}`, 'PUT', authToken, {id: todo._id, todo});
+    return await handleResponse(resp);
   }
 };

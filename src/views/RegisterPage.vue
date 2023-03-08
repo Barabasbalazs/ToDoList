@@ -35,13 +35,13 @@
 
 <script setup lang="ts">
   import { ref, computed } from 'vue';
-  import { User } from '../models/userr';
-  import PrimaryButton from './PrimaryButton.vue';
-  import UserInputComp from './UserInputComp.vue';
-  import ConfirmationModal from './ConfirmationModal.vue';
+  import { User } from '../models/user-model';
   import router from '../router/router';
   import { authService } from '../services/auth-service';
   import { isEmptyInput } from '../utils/input-validation';
+  import PrimaryButton from '../components/PrimaryButton.vue';
+  import UserInputComp from '../components/UserInputComp.vue';
+  import ConfirmationModal from '../components/ConfirmationModal.vue';
 
   const password = ref('');
   const email = ref('');
@@ -49,7 +49,6 @@
   const lastName = ref('');
 
   const isLoading = ref(false);
-
   const isPopUpShown = ref(false);
 
   const modalTitle = ref('');
@@ -70,20 +69,22 @@
     password.value = userInput.password;
   }
 
+  function registrationError() {
+    modalTitle.value = 'Unsuccesfull';
+    modalText.value = 'Failed to register';
+    isPopUpShown.value = true;
+  }
+
   async function register() {
     if (isEmptyInput(currentUserInput.value)) {
-      modalTitle.value = 'Unsuccesfull';
-      modalText.value = 'Failed to register';
-      isPopUpShown.value = true;
+      registrationError();
       return;
     }
     try {
       isLoading.value = true;
       const res = await authService.register(currentUserInput.value);
       if (!res) {
-        modalTitle.value = 'Unsuccesfull';
-        modalText.value = 'Failed to register';
-        isPopUpShown.value = true;
+        registrationError();
         return;
       }
       modalTitle.value = 'Succes';

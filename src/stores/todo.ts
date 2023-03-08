@@ -42,14 +42,21 @@ export const useTodoStore = defineStore('todos', {
       return false;
     },
     async removeToDo(index: number, todo: ToDoItem) {
-      const resp = await todoService.removeToDo(this.authStore.authToken, todo._id);
+      const resp = await todoService.removeToDo(
+        this.authStore.authToken,
+        todo._id
+      );
       if (resp) {
         this.todos.splice(index, 1);
         return true;
       }
       return false;
     },
-    async updateToDo(ind: number, todo: Partial<ToDoItem>, resolvedStatusChanged?: number) {
+    async updateToDo(
+      ind: number,
+      todo: Partial<ToDoItem>,
+      resolvedStatusChanged?: number
+    ) {
       const resp = await todoService.updateToDo(this.authStore.authToken, todo);
       if (!resp) {
         return false;
@@ -58,7 +65,7 @@ export const useTodoStore = defineStore('todos', {
       this.todos[ind].priority = reversePriority(resp.priority);
       if (resolvedStatusChanged === -1) {
         this.todos.push(this.todos.splice(ind, 1)[0]);
-      } else if (resolvedStatusChanged === 1){
+      } else if (resolvedStatusChanged === 1) {
         this.todos.unshift(this.todos.splice(ind, 1)[0]);
       }
       return true;

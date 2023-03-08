@@ -52,15 +52,15 @@
 <script setup lang="ts">
   import { computed, ref, onMounted } from 'vue';
   import { ToDoItem } from '../models/todoitem-model';
-  import ToDoCard from './ToDoCard.vue';
-  import PageHeader from './PageHeader.vue';
-  import ToDoPlaceHolder from './ToDoListPlaceHolder.vue';
-  import EditableToDo from './EditableToDo.vue';
-  import SearchBar from './SearchBar.vue';
-  import FilterBar from './FilterBar.vue';
   import { FilterType } from '../types/filter-type';
   import { useTodoStore } from '../stores/todo';
-  import ConfirmationModal from './ConfirmationModal.vue';
+  import ConfirmationModal from '../components/ConfirmationModal.vue';
+  import ToDoCard from '../components/ToDoCard.vue';
+  import PageHeader from '../components/PageHeader.vue';
+  import ToDoPlaceHolder from '../components/ToDoListPlaceHolder.vue';
+  import EditableToDo from '../components/EditableToDo.vue';
+  import SearchBar from '../components/SearchBar.vue';
+  import FilterBar from '../components/FilterBar.vue';
 
   const order = ref('asc');
   const sort = ref('isResolved');
@@ -87,21 +87,21 @@
     return listItems.value.length === 0;
   });
 
-  onMounted(async () => {
-    try {
-      await todoStore.getToDos(sort.value, order.value);
-    } catch (e) {
-      isErrorShown.value = true;
-    }
-  });
-
-  async function searchToDo(searchString: string) {
-    search.value = searchString;
+  async function getToDos() {
     try {
       await todoStore.getToDos(sort.value, order.value, search.value);
     } catch (e) {
       isErrorShown.value = true;
     }
+  }
+
+  onMounted(async () => {
+    await getToDos();
+  });
+
+  async function searchToDo(searchString: string) {
+    search.value = searchString;
+    await getToDos();
   }
 
   async function toggleResolvedStatus(ind: number, _id: string, isResolvedStatus: boolean) {
@@ -165,11 +165,7 @@
   async function filterToDos(filter: FilterType, orderBy: number) {
     sort.value = filter;
     order.value = orderBy === 1 ? 'asc' : 'desc';
-    try {
-      await todoStore.getToDos(sort.value, order.value, search.value);
-    } catch (e) {
-      isErrorShown.value = true;
-    }
+    await getToDos();
   }
 </script>
 
