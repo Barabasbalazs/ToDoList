@@ -1,14 +1,6 @@
 <template>
   <header>
     <div class="flex justify-between items-center mt-10 pb-8 border-b-2 mx-4">
-      <Transition>
-        <ConfirmationModal
-          v-if="isPopUpShown"
-          title="Warning"
-          text="Unsuccesfull logout"
-          @hide-pop-up="hidePopUp"
-        />
-      </Transition>
       <div class="flex flex-col text-black lg:text-lg font-medium">
         <p>Welcome</p>
         <p>{{ userName }}</p>
@@ -36,13 +28,10 @@
 </template>
 
 <script setup lang="ts">
-  import PrimaryButton from './PrimaryButton.vue';
-  import { useAuthStore } from '../stores/authentication';
   import { computed, ref } from 'vue';
+  import { useAuthStore } from '../stores/authentication';
   import router from '../router/router';
-  import ConfirmationModal from './ConfirmationModal.vue';
-
-  const isPopUpShown = ref(false);
+  import PrimaryButton from './PrimaryButton.vue';
 
   const authStore = useAuthStore();
 
@@ -60,20 +49,8 @@
     emit('showForm');
   }
 
-  function hidePopUp() {
-    isPopUpShown.value = false;
-  }
-
   async function logout() {
-    try {
-      const res = await authStore.logout();
-      if (!res) {
-        isPopUpShown.value = true;
-        return;
-      }
-      router.push('/login');
-    } catch (e) {
-      isPopUpShown.value = true;
-    }
+    await authStore.logout();
+    router.push('/login');
   }
 </script>
