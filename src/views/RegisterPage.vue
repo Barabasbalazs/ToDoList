@@ -8,7 +8,7 @@
         v-if="isPopUpShown"
         :title="modalTitle"
         :text="modalText"
-        :is-login-modal="true"
+        :is-failure-modal="!isSuccesfull"
         @hide-pop-up="hidePopUp"
       />
     </Transition>
@@ -38,7 +38,7 @@
   import { User } from '../models/user-model';
   import router from '../router/router';
   import { authService } from '../services/auth-service';
-  import { isEmptyInput } from '../utils/input-validation';
+  import { isUserValid } from '../utils/input-validation';
   import PrimaryButton from '../components/PrimaryButton.vue';
   import UserInputComp from '../components/UserInputComp.vue';
   import ConfirmationModal from '../components/ConfirmationModal.vue';
@@ -47,6 +47,7 @@
   const email = ref('');
   const firstName = ref('');
   const lastName = ref('');
+  const isSuccesfull = ref(false);
 
   const isLoading = ref(false);
   const isPopUpShown = ref(false);
@@ -76,7 +77,7 @@
   }
 
   async function register() {
-    if (isEmptyInput(currentUserInput.value)) {
+    if (!isUserValid(currentUserInput.value)) {
       registrationError();
       return;
     }
@@ -87,6 +88,7 @@
         registrationError();
         return;
       }
+      isSuccesfull.value = true;
       modalTitle.value = 'Succes';
       modalText.value =
         'You succesfully registered! We will take you to the login page now.';

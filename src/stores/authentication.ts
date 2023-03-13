@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
 import { User } from '../models/user-model';
 import { authService } from '../services/auth-service';
+import { useTodoStore } from './todo';
 
 export const useAuthStore = defineStore('authentication', {
   state: () => ({
-    user: {} as User,
+    user: {} as Partial<User>,
     authToken: '' as string,
   }),
   actions: {
@@ -21,6 +22,8 @@ export const useAuthStore = defineStore('authentication', {
       const resp = await authService.logout(this.authToken);
       this.user = {} as User;
       this.authToken = '';
+      const todoStore = useTodoStore();
+      todoStore.resetStore();
       return resp;
     },
   },

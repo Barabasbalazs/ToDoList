@@ -6,6 +6,8 @@
         title="Warning"
         text="Are you sure you want to delete this item? This operation is permanent
           and you will not be able to undo this action!"
+        is-optional-modal
+        is-failure-modal
         @remove-to-do="removeTodo"
         @hide-pop-up="hidePopUp"
       />

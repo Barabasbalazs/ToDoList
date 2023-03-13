@@ -8,17 +8,17 @@ export const useTodoStore = defineStore('todos', {
   state: () => ({
     todos: [] as ToDoItem[],
     todo: {} as ToDoItem,
-    authStore: useAuthStore(),
   }),
   actions: {
     async getToDos(sort?: string, order?: string, search?: string) {
+      const authStore= useAuthStore();
       const searchObj = {
         ...(sort && { sort }),
         ...(order && { order }),
         ...(search && { search }),
       };
       const resp = await todoService.getAll(
-        this.authStore.authToken,
+        authStore.authToken,
         searchObj
       );
       if (resp) {
@@ -32,7 +32,8 @@ export const useTodoStore = defineStore('todos', {
       return false;
     },
     async addToDo(todo: Partial<ToDoItem>) {
-      const resp = await todoService.addToDo(this.authStore.authToken, todo);
+      const authStore= useAuthStore();
+      const resp = await todoService.addToDo(authStore.authToken, todo);
       if (resp) {
         const newToDo = resp;
         newToDo.priority = reversePriority(resp.priority);
@@ -42,8 +43,9 @@ export const useTodoStore = defineStore('todos', {
       return false;
     },
     async removeToDo(index: number, todo: ToDoItem) {
+      const authStore= useAuthStore();
       const resp = await todoService.removeToDo(
-        this.authStore.authToken,
+        authStore.authToken,
         todo._id
       );
       if (resp) {
@@ -57,7 +59,8 @@ export const useTodoStore = defineStore('todos', {
       todo: Partial<ToDoItem>,
       resolvedStatusChanged?: number
     ) {
-      const resp = await todoService.updateToDo(this.authStore.authToken, todo);
+      const authStore= useAuthStore();
+      const resp = await todoService.updateToDo(authStore.authToken, todo);
       if (!resp) {
         return false;
       }
@@ -70,6 +73,10 @@ export const useTodoStore = defineStore('todos', {
       }
       return true;
     },
+    resetStore () {
+      this.todos = [] as ToDoItem[];
+      this.todo =  {} as ToDoItem;
+    }
   },
   persist: {
     enabled: true,

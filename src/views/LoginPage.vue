@@ -5,7 +5,7 @@
         v-if="isPopUpShown"
         title="Warning"
         text="Unsuccesfull login"
-        :is-login-modal="true"
+        is-failure-modal
         @hide-pop-up="hidePopUp"
       />
     </Transition>
@@ -66,6 +66,7 @@
       const res = await authStore.login(currentUserInput.value);
       if (!res) {
         isPopUpShown.value = true;
+        isLoading.value = false;
         return;
       }
       router.push('/');
